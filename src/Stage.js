@@ -9,10 +9,9 @@ function Stage (renderer, maze) {
 		this.wallsRendrer[line] = [];
 		for (var col=0 ; col<maze.walls[line].length ; col++) {
 			if (maze.walls[line][col]){
-				var broc = Assets.textures.walls[0]["empty"];
-				var ts = new PIXI.extras.TilingSprite (broc, broc.width, broc.height);
-				ts.z = 1;
-				this.wallsRendrer[line][col] = ts;
+				var sprite = this.selectSprite (line, col);
+				sprite.z = 1;
+				this.wallsRendrer[line][col] = sprite;
 			} else {
 				this.wallsRendrer[line][col] = null;
 			}
@@ -25,6 +24,36 @@ function Stage (renderer, maze) {
 Stage.prototype = Object.create(PIXI.Container.prototype, {
 	constructor: { value: Stage }
 });
+
+Stage.prototype.selectSprite = function (line, col) {
+	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
+	var south = this.maze.walls[line+1] == undefined || this.maze.walls[line+1][col] == undefined ? false : this.maze.walls[line+1][col];
+	var west = this.maze.walls[line] == undefined || this.maze.walls[line][col-1] == undefined ? false : this.maze.walls[line][col-1];
+	var east = this.maze.walls[line] == undefined || this.maze.walls[line][col+1] == undefined ? false : this.maze.walls[line][col+1];
+
+	var nb = north ? 1 : 0;
+	nb += south ? 1 : 0;
+	nb += east ? 1 : 0;
+	nb += west ? 1 : 0;
+
+	var texture = Assets.textures.walls[0]["empty"];
+	switch (nb) {
+		case 1:
+		texture = Assets.textures.walls[0]["endLine"];
+		break;
+
+		case 2:
+		texture = Assets.textures.walls[0]["twoSides"];
+		break;
+
+		case 3:
+		texture = Assets.textures.walls[0]["oneSide"];
+		break;
+	}
+
+	var ts = new PIXI.extras.TilingSprite (texture, texture.width, texture.height);
+	return ts;
+};
 
 Stage.prototype.refresh = function () {
 	this.addChildren(12);

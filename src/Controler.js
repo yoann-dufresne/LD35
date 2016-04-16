@@ -76,8 +76,6 @@ Controler.prototype = {
 			if (coords.prevY < coords.y)
 				coords.maze.charLine -= 0.000001
 		}
-
-		console.log(coords.y, coords.maze.charCol);
 	},
 }
 
