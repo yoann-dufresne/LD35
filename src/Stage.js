@@ -5,6 +5,11 @@ function Stage (renderer, maze) {
 	this.maze = maze;
 	this.wallsRendrer = [];
 
+	this.character = Assets.textures.character;
+	this.character = new PIXI.extras.TilingSprite(this.character, this.character.width, this.character.height);
+	this.character.x = this.renderer.width/2;
+	this.character.y = this.renderer.height/2;
+
 	for (var line=0 ; line<maze.walls.length ; line++) {
 		this.wallsRendrer[line] = [];
 		for (var col=0 ; col<maze.walls[line].length ; col++) {
@@ -143,4 +148,5 @@ Stage.prototype.addChildren = function (fov) {
 			}
 		}
 	}
+	this.addChild(this.character)
 }

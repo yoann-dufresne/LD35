@@ -27,6 +27,9 @@ var Assets = {
 	img: null,
 	subImgs: [],
 
+	loadedWalls: false,
+	loadedChar: false,
+
 	textures: {},
 
 	extractSubImage: function(x, y) {
@@ -43,6 +46,20 @@ var Assets = {
 			);
 	},
 
+	loadChar: function(){
+		charImg = new Image();
+		charImg.onload = function () {
+			charCanvas = document.createElement("canvas");
+			charCanvas.width = Assets.tileSize;
+			charCanvas.height = Assets.tileSize;
+			ctx = charCanvas.getContext("2d");
+			ctx.drawImage(charImg, 0, 0);
+			Assets.textures.character = PIXI.Texture.fromCanvas(cloneCanvas(charCanvas));
+			Assets.loadedChar = true;
+		}
+		charImg.src = "tmp_art/char.png";
+	},
+
 	loadWalls: function(){
 		Assets.textures.walls = [];
 		for (var i=0; i < tilesInfos.walls.length; i++){
@@ -54,6 +71,7 @@ var Assets = {
 				);
 				Assets.textures.walls[i][type] = PIXI.Texture.fromCanvas(cloneCanvas(Assets.tileCanvas));
 			};
+			Assets.loadedWalls=true;
 		}
 	},
 
@@ -62,9 +80,16 @@ var Assets = {
 		Assets.tilesSheetCanvas.width = Assets.img.width;
 		Assets.tilesSheetCanvas.height = Assets.img.height;
 		tilesSheetCtx.drawImage(Assets.img, 0, 0);
+		Assets.loadChar();
 		Assets.loadWalls();
+
 		var event = new Event('loadingComplete');
-		window.dispatchEvent(event);
+		setTimeout(function() {
+			if(Assets.loadedChar && Assets.loadedWalls) {
+				window.dispatchEvent(event);
+				Assets.loaded = true;
+			}
+		}, 10);
 	},
 
 	loadSpritesSheet: function(){
