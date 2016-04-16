@@ -6,15 +6,15 @@ function depthCompare(a,b) {
 	return 0;
 }
 
-function Vue (model, controler) {
+function Vue (maze, controler) {
 	this.renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0xE42217});
 	document.body.appendChild(this.renderer.view);
-	this.model = model;
+	this.maze = maze;
 	//this.controler = controler;
 
 	var that = this;
 	Assets.loader.once("complete", function () {
-		that.stage = new Stage(that.renderer, that.model);
+		that.stage = new Stage(that.renderer, that.maze);
 	});
 }
 
@@ -51,7 +51,7 @@ Vue.prototype = {
 
 }
 
-var vue = new Vue (maze, null)//, model, controler);
+var vue = new Vue (maze, null)//, maze, controler);
 //vue.initMenu();
 //vue.initButtons();
 //vue.changeStage("test");
