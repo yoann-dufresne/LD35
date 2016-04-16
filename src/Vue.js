@@ -13,9 +13,13 @@ function Vue (model, controler) {
 	//this.controler = controler;
 
 	var that = this;
-	Assets.loader.once("complete", function () {
-		that.stage = new Stage(that.renderer, that.maze);
-	});
+	// Assets.loader.once("complete", function () {
+	window.addEventListener('loadingComplete',
+		function (e) {
+			that.stage = new Stage(that.renderer, that.maze);
+			Assets.loaded = true;
+		},
+		false);
 }
 
 Vue.prototype = {

@@ -9,7 +9,7 @@ function Stage (renderer, maze) {
 		this.wallsRendrer[line] = [];
 		for (var col=0 ; col<maze.walls[line].length ; col++) {
 			if (maze.walls[line][col]){
-				var broc = Assets.loader.resources.broc.texture;
+				var broc = Assets.texture;
 				var ts = new PIXI.extras.TilingSprite (broc, broc.width, broc.height);
 				ts.z = 1;
 				this.wallsRendrer[line][col] = ts;

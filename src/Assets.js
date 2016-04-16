@@ -10,7 +10,11 @@ var Assets = {
 	img: null,
 	subImgs: [],
 
+	texture: null,
+
 	extractSubImage: function(x, y) {
+		Assets.tileCanvas.width = Assets.tileSize;
+		Assets.tileCanvas.height = Assets.tileSize;
 		var tmpCtx = Assets.tileCanvas.getContext("2d");
 		tmpCtx.drawImage(
 			Assets.tilesSheetCanvas,
@@ -20,7 +24,6 @@ var Assets = {
 			0, 0,
 			Assets.tileSize, Assets.tileSize
 			);
-		return Assets.tileCanvas.toDataURL("image/png");
 	},
 
 	separateSprintes: function() {
@@ -28,14 +31,15 @@ var Assets = {
 		Assets.tilesSheetCanvas.width = Assets.img.width;
 		Assets.tilesSheetCanvas.height = Assets.img.height;
 		tilesSheetCtx.drawImage(Assets.img, 0, 0);
-
 		var walls = tilesInfos.walls[0];
 		for (var type in walls) {
-			var tile = Assets.extractSubImage(
-									walls[type].x, walls[type].x, Assets.img
-								) ;
-			console.log(tile);
+			Assets.extractSubImage(
+					walls[type].x, walls[type].y, Assets.img
+			) ;
+			Assets.texture = PIXI.Texture.fromCanvas(Assets.tileCanvas);
 		};
+		var event = new Event('loadingComplete');
+		window.dispatchEvent(event);
 	},
 
 	loadSpritesSheet: function(){
@@ -46,18 +50,6 @@ var Assets = {
 		Assets.img.src = Assets.sprintSheetURL;
 	},
 
-	loadSprites: function () {
-		var that = this;
-
-		this.loader.add("broc", "tmp_art/broc.png");
-		this.loader.once('complete', function() {
-			console.log("Assets loaded");
-			that.loaded = true;
-		});
-		this.loader.load();
-	}
-
 };
 
 Assets.loadSpritesSheet();
-//Assets.loadSprites();
