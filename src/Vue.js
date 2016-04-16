@@ -34,8 +34,8 @@ Vue.prototype = {
 			// 2 - Move
 			this.stage.refresh ();
 
-			// // 3 - Collisions
-			// // Automatic (listeners)
+			// 3 - Collisions
+			// Automatic (listeners)
 
 			// // 4 - Send data through the network
 			// // TODO
