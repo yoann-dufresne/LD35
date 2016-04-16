@@ -31,18 +31,19 @@ Stage.prototype.refresh = function () {
 };
 
 Stage.prototype.addChildren = function (fov) {
-	//console.log("add");
 	for (var i = this.children.length - 1; i >= 0; i--) {
 		this.removeChild(this.children[i]);
 	}
 
 	var cLine = this.maze.charLine;
+	var floorLine = Math.floor(cLine);
 	var cCol = this.maze.charCol;
-	for (var line=cLine-fov ; line<=cLine+fov ; line++) {
+	var floorCol = Math.floor(cCol);
+	for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
 		if (!this.wallsRendrer[line])
 			continue;
 
-		for (var col=cCol-fov ; col<=cCol+fov ; col++) {
+		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
 			if (!this.wallsRendrer[line][col])
 				continue;
 

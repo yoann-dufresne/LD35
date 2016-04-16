@@ -4,6 +4,7 @@ function Maze (width, height) {
 
 	this.charLine = height/2;
 	this.charCol = width/2;
+	this.speed = 5;
 
 	this.walls = [];
 	for (var line=0 ; line<height ; line++) {

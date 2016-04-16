@@ -10,7 +10,7 @@ function Vue (maze, controler) {
 	this.renderer = PIXI.autoDetectRenderer(800, 600,{backgroundColor : 0xE42217});
 	document.body.appendChild(this.renderer.view);
 	this.maze = maze;
-	//this.controler = controler;
+	this.controler = controler;
 
 	var that = this;
 	Assets.loader.once("complete", function () {
@@ -29,7 +29,7 @@ Vue.prototype = {
 		if (Assets.loaded && this.stage) {
 
 			// 1 - Input
-			//this.controler.refresh ();
+			this.controler.refresh ();
 
 			// 2 - Move
 			this.stage.refresh ();
@@ -51,8 +51,5 @@ Vue.prototype = {
 
 }
 
-var vue = new Vue (maze, null)//, maze, controler);
-//vue.initMenu();
-//vue.initButtons();
-//vue.changeStage("test");
+var vue = new Vue (maze, controler);
 vue.startAnimation();
