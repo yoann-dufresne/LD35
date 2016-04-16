@@ -39,11 +39,14 @@ Stage.prototype.selectSprite = function (line, col) {
 	var texture = Assets.textures.walls[0]["empty"];
 	switch (nb) {
 		case 1:
-		texture = Assets.textures.walls[0]["endLine"];
+			texture = Assets.textures.walls[0]["endLine"];
 		break;
 
 		case 2:
-		texture = Assets.textures.walls[0]["twoSides"];
+		if ((east && west) || (south && north))
+			texture = Assets.textures.walls[0]["twoSides"];
+		else
+			texture = Assets.textures.walls[0]["corner"];
 		break;
 
 		case 3:
@@ -52,6 +55,62 @@ Stage.prototype.selectSprite = function (line, col) {
 	}
 
 	var ts = new PIXI.extras.TilingSprite (texture, texture.width, texture.height);
+
+
+	switch (nb) {
+		case 1:
+			if (south) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI;
+			} else if (east) {
+				ts.anchor.x = 0;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI/2;
+			} else if (west) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 0;
+				ts.rotation += -Math.PI/2;
+			}
+		break;
+
+		case 2:
+			if (east && west) {
+				ts.anchor.x = 0;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI/2;
+			} else if (north && west) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 0;
+				ts.rotation += -Math.PI/2;
+			} else if (south && west) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI;
+			} else if (south && east) {
+				ts.anchor.x = 0;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI/2;
+			}
+		break;
+
+		case 3:
+			if (!east) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 0;
+				ts.rotation += -Math.PI/2;
+			} else if (!west) {
+				ts.anchor.x = 0;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI/2;
+			} else if (!north) {
+				ts.anchor.x = 1;
+				ts.anchor.y = 1;
+				ts.rotation += Math.PI;
+			}
+		break;
+	}
+
 	return ts;
 };
 
