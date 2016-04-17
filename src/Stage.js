@@ -14,12 +14,11 @@ function Stage (renderer, maze) {
 
 	this.floorRendered = [];
 
-	var blackFog = new PIXI.Graphics();
-	blackFog.lineStyle ( 2 , 0x000000,  1);
-	blackFog.beginFill(this.colour);
-	blackFog.drawCircle(renderer.width / 2, renderer.height / 2
+	this.blackFog = new PIXI.Graphics();
+	this.blackFog.lineStyle ( 2 , 0x000000,  1);
+	this.blackFog.beginFill(this.colour);
+	this.blackFog.drawCircle(renderer.width / 2, renderer.height / 2
 , 300);
-
 
 	var canvas = document.createElement('canvas');
 	canvas.width = this.renderer.width;
@@ -35,14 +34,20 @@ function Stage (renderer, maze) {
 	var texture = PIXI.Texture.fromCanvas(canvas);
 	// blackFog.filters = [new PIXI.AlphaMaskFilter(texture)];
 
-
-	blackFog.position.x = renderer.width / 2;
-	blackFog.position.y = renderer.height / 2;
+	this.blackFog.position.x = renderer.width / 2;
+	this.blackFog.position.y = renderer.height / 2;
 	// this.addChild(blackFog);
-	this.mask = blackFog;
+	this.mask = this.blackFog;
 
 
 	var that = this;
+	$("#radius").on("input change", function() {
+			that.blackFog.clear();
+			that.blackFog.lineStyle ( 2 , 0x000000,  1);
+			that.blackFog.beginFill(that.colour);
+			that.blackFog.drawCircle(renderer.width/2, renderer.height/2, $("#radius").val());
+			console.log($("#radius").val())
+	});
 	var generate = function () {
 		for (var line=0 ; line<maze.height ; line++) {
 			that.floorRendered[line] = [];
