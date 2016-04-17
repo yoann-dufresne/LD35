@@ -23,35 +23,43 @@ Maze.prototype = {
 			for (var col=0 ; col<this.width ; col++)
 				candidates.push({"line":line, "col":col});
 
-		var rnd = Math.floor(Math.random()*candidates.length);
-		var tile = candidates[rnd];
-		candidates.splice(rnd, 1);
-		this.walls[tile.line][tile.col] = true;
-		console.log(tile);
+		var idx = candidates.indexOf ({"line":this.height/2, "col":this.width/2});
+		console.log(idx);
+		candidates.splice(idx, 1);
 
-		// TODO : Candidates remove
+		while (candidates.length > 0) {
+			var rnd = Math.floor(Math.random()*candidates.length);
+			var tile = candidates[rnd];
+			candidates.splice(rnd, 1);
+			this.walls[tile.line][tile.col] = true;
+			//console.log(tile);
+		
+			var walls = [];
+			walls.push(tile);
 
-		var walls = [];
-		walls.push(tile);
+			while (walls.length > 0 && Math.random() > (1/size)) {
+				idx = Math.floor(Math.random()*walls.length);
+				tile = walls[idx];
+				var free = this.getFreeNeighbors(tile);
 
-		var val = 0;
-		while (walls.length > 0 && Math.random() > (1/size)) {
-			var idx = Math.floor(Math.random()*walls.length);
-			tile = walls[idx];
-			var free = this.getFreeNeighbors(tile);
+				if (free.length == 0)
+					walls.splice(idx, 1);
+				else {
+					idx = Math.floor(Math.random()*free.length);
+					tile = free[idx];
+					this.walls[tile.line][tile.col] = true;
+					walls.push(tile);
 
-			if (free.length == 0)
-				walls.splice(idx, 1);
-			else {
-				idx = Math.floor(Math.random()*free.length);
-				tile = free[idx];
-				this.walls[tile.line][tile.col] = true;
-				walls.push(tile);
+					for (var line=tile.line-1 ; line<=tile.line+1 ; line++)
+						for (var col=tile.col-1 ; col<=tile.col+1 ; col++) {
+							idx = candidates.indexOf ({"line":line, "col":col});
+							//console.log(idx);
+							if (idx >= 0)
+								candidates.splice(idx, 1);
+						}
+				}
 			}
-
-			val++;
 		}
-		console.log("val " + val);
 	},
 
 	getFreeNeighbors: function (tile) {
