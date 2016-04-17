@@ -21,20 +21,24 @@ function Stage (renderer, maze) {
 			that.wallsRendered[line] = [];
 			that.floorRendered[line] = [];
 			for (var col=0 ; col<maze.walls[line].length ; col++) {
-					var floor = Assets.textures.floor;
-					floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
-					floor.z = 1;
-					that.floorRendered[line][col] = floor;
+				var floor = Assets.textures.floor;
+				floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
+				floor.z = 1;
+				that.floorRendered[line][col] = floor;
+				that.addChild(floor);
 
 				if (maze.walls[line][col]){
 					var sprite = that.selectSprite (line, col);
 					sprite.z = 3;
 					that.wallsRendered[line][col] = sprite;
+					that.addChild(sprite);
 				} else {
 					that.wallsRendered[line][col] = null;
 				}
 			}
 		}
+		that.addChild(that.character);
+		that.children.sort(depthCompare);
 	}
 
 	var trigger = function() {
@@ -53,61 +57,23 @@ Stage.prototype = Object.create(PIXI.Container.prototype, {
 });
 
 Stage.prototype.refresh = function () {
-	var dx = this.maze.charCol - this.maze.oldCharCol;
-	var dy = this.maze.charLine - this.maze.oldCharLine;
-	dx *= Assets.tileSize;
-	dy *= Assets.tileSize;
-
-	if (this.maze.caseChanged)
-		this.addChildren(12);
-	else if (dx != 0 || dy != 0) {
-		for (var i = this.children.length - 1; i >= 0; i--) {
-			this.children[i].x -= dx;
-			this.children[i].y -= dy;
-		}
-		this.character.x = this.renderer.width/2;
-		this.character.y = this.renderer.height/2;
-	}
-
-	this.maze.caseChanged = false;
-	this.maze.oldCharCol  = this.maze.charCol;
-	this.maze.oldCharLine = this.maze.charLine;
-};
-
-Stage.prototype.addChildren = function (fov) {
-	for (var i = this.children.length - 1; i >= 0; i--) {
-		this.removeChild(this.children[i]);
-	}
-
 	var cLine = this.maze.charLine;
-	var floorLine = Math.floor(cLine);
 	var cCol = this.maze.charCol;
-	var floorCol = Math.floor(cCol);
 
-
-	for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
-		if (!this.wallsRendered[line])
-			continue;
-
-		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
-			if (!this.floorRendered[line][col])
-				continue;
-
+	for (var line=0 ; line<this.maze.height; line++) {
+		for (var col=0 ; col<this.maze.width ; col++) {
 			var floor = this.floorRendered[line][col];
 				floor.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
 				floor.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
-				this.addChild(floor);
 
 			if (this.wallsRendered[line][col] != null) {
 				var ts = this.wallsRendered[line][col]; // this.renderer.width
 				ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
 				ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
-				this.addChild(ts);
 			}
 		}
 	}
-	this.addChild(this.character)
-}
+};
 
 Stage.prototype.selectSprite = function (line, col) {
 	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
