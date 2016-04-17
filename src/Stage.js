@@ -11,13 +11,22 @@ function Stage (renderer, maze) {
 	this.character.y = this.renderer.height/2;
 	this.character.anchor.x = 0.5;
 	this.character.anchor.y = 0.5;
+	this.character.z = 2;
+
+	this.floorRendrer = [];
 
 	for (var line=0 ; line<maze.walls.length ; line++) {
 		this.wallsRendrer[line] = [];
+		this.floorRendrer[line] = [];
 		for (var col=0 ; col<maze.walls[line].length ; col++) {
+				var floor = Assets.textures.floor;
+				floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
+				floor.z = 2;
+				this.floorRendrer[line][col] = floor;
+
 			if (maze.walls[line][col]){
 				var sprite = this.selectSprite (line, col);
-				sprite.z = 1;
+				sprite.z = 3;
 				this.wallsRendrer[line][col] = sprite;
 			} else {
 				this.wallsRendrer[line][col] = null;
@@ -50,8 +59,13 @@ Stage.prototype.addChildren = function (fov) {
 			continue;
 
 		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
-			if (!this.wallsRendrer[line][col])
+			if (!this.floorRendrer[line][col])
 				continue;
+
+			var floor = this.floorRendrer[line][col];
+				floor.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
+				floor.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
+				this.addChild(floor);
 
 			if (this.wallsRendrer[line][col] != null) {
 				var ts = this.wallsRendrer[line][col]; // this.renderer.width

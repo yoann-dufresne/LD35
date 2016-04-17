@@ -29,6 +29,7 @@ var Assets = {
 
 	loadedWalls: false,
 	loadedChar: false,
+	loadedFloor: false,
 
 	textures: {},
 
@@ -75,6 +76,20 @@ var Assets = {
 		}
 	},
 
+	loadFloor: function(){
+		floarImg = new Image();
+		floarImg.onload = function () {
+			floorCanvas = document.createElement("canvas");
+			floorCanvas.width = Assets.tileSize;
+			floorCanvas.height = Assets.tileSize;
+			ctx = floorCanvas.getContext("2d");
+			ctx.drawImage(floarImg, 0, 0);
+			Assets.textures.floor = PIXI.Texture.fromCanvas(cloneCanvas(floorCanvas));
+			Assets.loadedFloor = true;
+		}
+		floarImg.src = "tmp_art/floor.png";
+	},
+
 	separateSprintes: function() {
 		var tilesSheetCtx = Assets.tilesSheetCanvas.getContext("2d");
 		Assets.tilesSheetCanvas.width = Assets.img.width;
@@ -82,10 +97,11 @@ var Assets = {
 		tilesSheetCtx.drawImage(Assets.img, 0, 0);
 		Assets.loadChar();
 		Assets.loadWalls();
+		Assets.loadFloor();
 
 		var event = new Event('loadingComplete');
 		setTimeout(function() {
-			if(Assets.loadedChar && Assets.loadedWalls) {
+			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor) {
 				window.dispatchEvent(event);
 				Assets.loaded = true;
 			}
