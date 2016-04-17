@@ -25,6 +25,37 @@ Stage.prototype = Object.create(PIXI.Container.prototype, {
 	constructor: { value: Stage }
 });
 
+Stage.prototype.refresh = function () {
+	this.addChildren(12);
+};
+
+Stage.prototype.addChildren = function (fov) {
+	for (var i = this.children.length - 1; i >= 0; i--) {
+		this.removeChild(this.children[i]);
+	}
+
+	var cLine = this.maze.charLine;
+	var floorLine = Math.floor(cLine);
+	var cCol = this.maze.charCol;
+	var floorCol = Math.floor(cCol);
+	for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
+		if (!this.wallsRendrer[line])
+			continue;
+
+		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
+			if (!this.wallsRendrer[line][col])
+				continue;
+
+			if (this.wallsRendrer[line][col] != null) {
+				var ts = this.wallsRendrer[line][col]; // this.renderer.width
+				ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
+				ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
+				this.addChild(ts);
+			}
+		}
+	}
+}
+
 Stage.prototype.selectSprite = function (line, col) {
 	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
 	var south = this.maze.walls[line+1] == undefined || this.maze.walls[line+1][col] == undefined ? false : this.maze.walls[line+1][col];
@@ -113,34 +144,3 @@ Stage.prototype.selectSprite = function (line, col) {
 
 	return ts;
 };
-
-Stage.prototype.refresh = function () {
-	this.addChildren(12);
-};
-
-Stage.prototype.addChildren = function (fov) {
-	for (var i = this.children.length - 1; i >= 0; i--) {
-		this.removeChild(this.children[i]);
-	}
-
-	var cLine = this.maze.charLine;
-	var floorLine = Math.floor(cLine);
-	var cCol = this.maze.charCol;
-	var floorCol = Math.floor(cCol);
-	for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
-		if (!this.wallsRendrer[line])
-			continue;
-
-		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
-			if (!this.wallsRendrer[line][col])
-				continue;
-
-			if (this.wallsRendrer[line][col] != null) {
-				var ts = this.wallsRendrer[line][col]; // this.renderer.width
-				ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
-				ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
-				this.addChild(ts);
-			}
-		}
-	}
-}
