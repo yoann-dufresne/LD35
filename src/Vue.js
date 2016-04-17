@@ -17,7 +17,6 @@ function Vue (model, controler) {
 	window.addEventListener('loadingComplete',
 		function (e) {
 			that.stage = new Stage(that.renderer, that.maze);
-			Assets.loaded = true;
 		},
 		false);
 }

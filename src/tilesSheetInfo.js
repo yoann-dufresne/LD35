@@ -14,5 +14,7 @@ var tilesInfos = {
       "oneSide" : {x: 3, y: 1},
       "empty"   : {x: 4, y: 1},
     }
-  ]
+  ],
+
+  "character": {x:-1, y:-1},
 }
