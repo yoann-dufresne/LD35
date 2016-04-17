@@ -56,36 +56,70 @@ Stage.prototype.refresh = function () {
 };
 
 Stage.prototype.addChildren = function (fov) {
-	for (var i = this.children.length - 1; i >= 0; i--) {
-		this.removeChild(this.children[i]);
-	}
+	// for (var i = this.children.length - 1; i >= 0; i--) {
+	// 	this.removeChild(this.children[i]);
+	// }
 
 	var cLine = this.maze.charLine;
 	var floorLine = Math.floor(cLine);
 	var cCol = this.maze.charCol;
 	var floorCol = Math.floor(cCol);
-	for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
-		if (!this.wallsRendrer[line])
-			continue;
 
-		for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
-			if (!this.floorRendrer[line][col])
+	dx = this.maze.charCol - this.maze.oldCharCol;
+	dy = this.maze.charLine - this.maze.oldCharLine;
+
+	if(dx > 0){
+		for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
+			if (!this.wallsRendrer[line])
 				continue;
-
-			var floor = this.floorRendrer[line][col];
-				floor.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
-				floor.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
-				this.addChild(floor);
-
-			if (this.wallsRendrer[line][col] != null) {
-				var ts = this.wallsRendrer[line][col]; // this.renderer.width
-				ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
-				ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
-				this.addChild(ts);
-			}
+			// on ajoute les colonnes à droite et supprime à gauche
 		}
 	}
+	else if (dx < 0){
+
+	}
+	else {
+
+	}
+
+
+	if(dy > 0){
+
+	}
+	else if (dy < 0){
+
+	}
+	else {
+
+	}
+
+
+
+	// for (var line=floorLine-fov ; line<=floorLine+fov ; line++) {
+	// 	if (!this.wallsRendrer[line])
+	// 		continue;
+
+	// 	for (var col=floorCol-fov ; col<=floorCol+fov ; col++) {
+	// 		if (!this.floorRendrer[line][col])
+	// 			continue;
+
+	// 		var floor = this.floorRendrer[line][col];
+	// 			floor.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
+	// 			floor.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
+	// 			this.addChild(floor);
+
+	// 		if (this.wallsRendrer[line][col] != null) {
+	// 			var ts = this.wallsRendrer[line][col]; // this.renderer.width
+	// 			ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
+	// 			ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
+	// 			this.addChild(ts);
+	// 		}
+	// 	}
+	// }
 	this.addChild(this.character)
+
+	this.maze.oldCharCol  = this.maze.charCol;
+	this.maze.oldCharLine = this.maze.charLine;
 }
 
 Stage.prototype.selectSprite = function (line, col) {
