@@ -15,24 +15,34 @@ function Stage (renderer, maze) {
 
 	this.floorRendrer = [];
 
-	for (var line=0 ; line<maze.walls.length ; line++) {
-		this.wallsRendrer[line] = [];
-		this.floorRendrer[line] = [];
-		for (var col=0 ; col<maze.walls[line].length ; col++) {
-				var floor = Assets.textures.floor;
-				floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
-				floor.z = 2;
-				this.floorRendrer[line][col] = floor;
+	var that = this;
+	var generate = function () {
+		for (var line=0 ; line<maze.walls.length ; line++) {
+			that.wallsRendrer[line] = [];
+			that.floorRendrer[line] = [];
+			for (var col=0 ; col<maze.walls[line].length ; col++) {
+					var floor = Assets.textures.floor;
+					floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
+					floor.z = 2;
+					that.floorRendrer[line][col] = floor;
 
-			if (maze.walls[line][col]){
-				var sprite = this.selectSprite (line, col);
-				sprite.z = 3;
-				this.wallsRendrer[line][col] = sprite;
-			} else {
-				this.wallsRendrer[line][col] = null;
+				if (maze.walls[line][col]){
+					var sprite = that.selectSprite (line, col);
+					sprite.z = 3;
+					that.wallsRendrer[line][col] = sprite;
+				} else {
+					that.wallsRendrer[line][col] = null;
+				}
 			}
 		}
 	}
+	var trigger = function() {
+		if (that.maze.loaded)
+			generate();
+		else
+			setTimeout (trigger, 10);
+	}
+	trigger();
 
 	this.updateRequired = true;
 }

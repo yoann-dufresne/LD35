@@ -100,10 +100,11 @@ var Assets = {
 		Assets.loadFloor();
 
 		var event = new Event('loadingComplete');
-		setTimeout(function() {
+		var interv = setInterval(function() {
 			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor) {
 				window.dispatchEvent(event);
 				Assets.loaded = true;
+				clearInterval(interv);
 			}
 		}, 10);
 	},
