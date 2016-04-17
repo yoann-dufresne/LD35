@@ -33,32 +33,39 @@ var Assets = {
 
 	textures: {},
 
-	extractSubImage: function(x, y) {
-		Assets.tileCanvas.width = Assets.tileSize;
-		Assets.tileCanvas.height = Assets.tileSize;
-		var tmpCtx = Assets.tileCanvas.getContext("2d");
+	extractSubImage: function(x, y, tilesSheetCanvas) {
+		var tileCanvas = document.createElement("canvas");
+		tileCanvas.width = Assets.tileSize;
+		tileCanvas.height = Assets.tileSize;
+		var tmpCtx = tileCanvas.getContext("2d");
 		tmpCtx.drawImage(
-			Assets.tilesSheetCanvas,
+			tilesSheetCanvas,
 			x * Assets.tileSize,
 			y * Assets.tileSize,
 			Assets.tileSize, Assets.tileSize,
 			0, 0,
 			Assets.tileSize, Assets.tileSize
 			);
+
+		return tileCanvas;
 	},
 
 	loadChar: function(){
 		charImg = new Image();
 		charImg.onload = function () {
-			charCanvas = document.createElement("canvas");
-			charCanvas.width = Assets.tileSize;
-			charCanvas.height = Assets.tileSize;
-			ctx = charCanvas.getContext("2d");
-			ctx.drawImage(charImg, 0, 0);
-			Assets.textures.character = PIXI.Texture.fromCanvas(cloneCanvas(charCanvas));
+			var spriteSheetCanvas = document.createElement("canvas");
+			spriteSheetCanvas.width = charImg.width;
+			spriteSheetCanvas.height = charImg.height;
+			spriteSheetCanvas.getContext("2d").drawImage(charImg, 0, 0);
+			
+			Assets.textures.character = [];
+			for (var idx=0 ; idx<8 ; idx++) {
+				var canvas = Assets.extractSubImage(6, idx, spriteSheetCanvas);
+				Assets.textures.character[idx] = PIXI.Texture.fromCanvas(canvas);
+			}
 			Assets.loadedChar = true;
 		}
-		charImg.src = "tmp_art/char.png";
+		charImg.src = "art/animation.png";
 	},
 
 	loadWalls: function(){
@@ -67,10 +74,10 @@ var Assets = {
 			var walls = tilesInfos.walls[i];
 			Assets.textures.walls[i] = {}
 			for (var type in walls) {
-				Assets.extractSubImage(
-					walls[type].x, walls[type].y, Assets.img
+				var canvas = Assets.extractSubImage(
+					walls[type].x, walls[type].y, Assets.tilesSheetCanvas
 				);
-				Assets.textures.walls[i][type] = PIXI.Texture.fromCanvas(cloneCanvas(Assets.tileCanvas));
+				Assets.textures.walls[i][type] = PIXI.Texture.fromCanvas(canvas);
 			};
 			Assets.loadedWalls=true;
 		}
@@ -79,7 +86,7 @@ var Assets = {
 	loadFloor: function(){
 		floarImg = new Image();
 		floarImg.onload = function () {
-			floorCanvas = document.createElement("canvas");
+			var floorCanvas = document.createElement("canvas");
 			floorCanvas.width = Assets.tileSize;
 			floorCanvas.height = Assets.tileSize;
 			ctx = floorCanvas.getContext("2d");

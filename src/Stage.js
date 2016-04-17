@@ -1,3 +1,4 @@
+var ANIMATION_FRAMERATE = 6;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);
@@ -5,14 +6,16 @@ function Stage (renderer, maze) {
 	this.maze = maze;
 	this.wallsRendered = [];
 
-	this.character = Assets.textures.character;
+	this.character = Assets.textures.character[0];
 	this.character = new PIXI.Sprite(this.character, this.character.width, this.character.height);
 	this.character.x = this.renderer.width/2;
 	this.character.y = this.renderer.height/2;
 	this.character.anchor.x = 0.5;
 	this.character.anchor.y = 0.5;
+	this.character.frame = 0;
 
 	this.floorRendered = [];
+	this.frame = ANIMATION_FRAMERATE;
 
 	this.blackFog = new PIXI.Graphics();
 	this.blackFog.lineStyle ( 2 , 0x000000,  1);
@@ -94,6 +97,21 @@ Stage.prototype.refresh = function () {
 	var cLine = this.maze.charLine;
 	var cCol = this.maze.charCol;
 
+	var dx = cCol - this.maze.oldCharCol;
+	var dy = cLine - this.maze.oldCharLine;
+
+	if (dx == 0 && dy == 0) {
+		this.character.texture = Assets.textures.character[0];
+		this.frame = 1;
+	} else {
+		this.frame--;
+		if (this.frame == 0) {
+			this.character.frame = (this.character.frame + 1) % Assets.textures.character.length;
+			this.character.texture = Assets.textures.character[this.character.frame];
+			this.frame = ANIMATION_FRAMERATE;
+		}
+	}
+
 	for (var line=0 ; line<this.maze.height; line++) {
 		for (var col=0 ; col<this.maze.width ; col++) {
 			var floor = this.floorRendered[line][col];
@@ -107,6 +125,9 @@ Stage.prototype.refresh = function () {
 			}
 		}
 	}
+
+	this.maze.oldCharCol = cCol;
+	this.maze.oldCharLine = cLine;
 };
 
 Stage.prototype.selectSprite = function (line, col) {
