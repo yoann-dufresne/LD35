@@ -2,6 +2,7 @@
 function Controler (input, maze) {
 	this.input = input;
 	this.maze = maze;
+	this.maze.caseChanged = false;
 }
 
 Controler.prototype = {
@@ -37,10 +38,15 @@ Controler.prototype = {
 		// Trigger the events functions
 		var x = Math.floor (this.maze.charCol);
 		var y = Math.floor (this.maze.charLine);
+
+		if (x != Math.floor(prevX) || y != Math.floor(prevY)){
+			this.maze.caseChanged = true;
+		}
+
 		if (this.maze.walls[y] != undefined &&
 		 		this.maze.walls[y][x] != undefined &&
 		  		this.maze.walls[y][x]) {
-			
+
 			this.collide({
 				x: this.maze.charCol,
 				y: this.maze.charLine,
