@@ -14,6 +14,34 @@ function Stage (renderer, maze) {
 
 	this.floorRendered = [];
 
+	var blackFog = new PIXI.Graphics();
+	blackFog.lineStyle ( 2 , 0x000000,  1);
+	blackFog.beginFill(this.colour);
+	blackFog.drawCircle(renderer.width / 2, renderer.height / 2
+, 300);
+
+
+	var canvas = document.createElement('canvas');
+	canvas.width = this.renderer.width;
+	canvas.height = this.renderer.height;
+	var ctx = canvas.getContext('2d');
+	var gradient = ctx.createLinearGradient(0,0,170,0);
+	gradient.addColorStop(0,"black");
+	gradient.addColorStop(1,"white");
+
+	ctx.fillStyle = gradient;
+	ctx.fillRect(20,20,150,100);
+
+	var texture = PIXI.Texture.fromCanvas(canvas);
+	// blackFog.filters = [new PIXI.AlphaMaskFilter(texture)];
+
+
+	blackFog.position.x = renderer.width / 2;
+	blackFog.position.y = renderer.height / 2;
+	// this.addChild(blackFog);
+	this.mask = blackFog;
+
+
 	var that = this;
 	var generate = function () {
 		for (var line=0 ; line<maze.height ; line++) {

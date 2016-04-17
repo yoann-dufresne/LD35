@@ -7,7 +7,7 @@ function depthCompare(a,b) {
 }
 
 function Vue (model, controler) {
-	this.renderer = PIXI.autoDetectRenderer(800, 800,{backgroundColor : 0xE42217});
+	this.renderer = PIXI.autoDetectRenderer(800, 800,{backgroundColor : 0x444444});
 	document.body.appendChild(this.renderer.view);
 	this.maze = maze;
 	this.controler = controler;
