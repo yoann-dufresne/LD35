@@ -40,7 +40,6 @@ function Stage (renderer, maze) {
 				}
 			}
 		}
-		console.log("Toto");
 	}
 
 	var trigger = function() {
@@ -90,6 +89,9 @@ Stage.prototype.selectSprite = function (line, col) {
 
 	var texture = Assets.textures.walls[0]["empty"];
 	switch (nb) {
+		case 0:
+			texture = Assets.textures.walls[0]["full"];
+		break;
 		case 1:
 			texture = Assets.textures.walls[0]["endLine"];
 		break;
