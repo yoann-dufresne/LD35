@@ -97,20 +97,7 @@ Stage.prototype.refresh = function () {
 	var cLine = this.maze.charLine;
 	var cCol = this.maze.charCol;
 
-	var dx = cCol - this.maze.oldCharCol;
-	var dy = cLine - this.maze.oldCharLine;
-
-	if (dx == 0 && dy == 0) {
-		this.character.texture = Assets.textures.character[0];
-		this.frame = 1;
-	} else {
-		this.frame--;
-		if (this.frame == 0) {
-			this.character.frame = (this.character.frame + 1) % Assets.textures.character.length;
-			this.character.texture = Assets.textures.character[this.character.frame];
-			this.frame = ANIMATION_FRAMERATE;
-		}
-	}
+	this.charAnimation();
 
 	for (var line=0 ; line<this.maze.height; line++) {
 		for (var col=0 ; col<this.maze.width ; col++) {
@@ -129,6 +116,41 @@ Stage.prototype.refresh = function () {
 	this.maze.oldCharCol = cCol;
 	this.maze.oldCharLine = cLine;
 };
+
+Stage.prototype.charAnimation = function () {
+	var dx = this.maze.charCol - this.maze.oldCharCol;
+	var dy = this.maze.charLine - this.maze.oldCharLine;
+
+	if (dx == 0 && dy == 0) {
+		this.character.texture = Assets.textures.character[0];
+		this.frame = 1;
+	} else {
+		this.frame--;
+		if (this.frame == 0) {
+			this.character.frame = (this.character.frame + 1) % Assets.textures.character.length;
+			this.character.texture = Assets.textures.character[this.character.frame];
+			this.frame = ANIMATION_FRAMERATE;
+		}
+	}
+
+	if (dx > 0 && dy == 0) {
+		vue.stage.character.rotation = Math.PI/2;
+	} else if (dx < 0 && dy == 0) {
+		vue.stage.character.rotation = -Math.PI/2;
+	} else if (dx == 0 && dy > 0) {
+		vue.stage.character.rotation = Math.PI;
+	} else if (dx == 0 && dy < 0) {
+		vue.stage.character.rotation = 0;
+	} else if (dx > 0 && dy > 0) {
+		vue.stage.character.rotation = 3*Math.PI/4;
+	} else if (dx > 0 && dy < 0) {
+		vue.stage.character.rotation = Math.PI/4;
+	} else if (dx < 0 && dy > 0) {
+		vue.stage.character.rotation = -3*Math.PI/4;
+	} else if (dx < 0 && dy < 0) {
+		vue.stage.character.rotation = -Math.PI/4;
+	}
+}
 
 Stage.prototype.selectSprite = function (line, col) {
 	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
