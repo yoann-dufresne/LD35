@@ -9,6 +9,8 @@ function Stage (renderer, maze) {
 	this.character = new PIXI.extras.TilingSprite(this.character, this.character.width, this.character.height);
 	this.character.x = this.renderer.width/2;
 	this.character.y = this.renderer.height/2;
+	this.character.anchor.x = 0.5;
+	this.character.anchor.y = 0.5;
 
 	for (var line=0 ; line<maze.walls.length ; line++) {
 		this.wallsRendrer[line] = [];
