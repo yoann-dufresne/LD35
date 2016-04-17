@@ -35,15 +35,15 @@ Controler.prototype = {
 		this.maze.charLine += this.maze.speed * (durationY / 1000);
 
 		// Trigger the events functions
-		var x = Math.floor (this.maze.charLine);
-		var y = Math.floor (this.maze.charCol);
-		if (this.maze.walls[x] != undefined &&
-		 		this.maze.walls[x][y] != undefined &&
-		  		this.maze.walls[x][y]) {
+		var x = Math.floor (this.maze.charCol);
+		var y = Math.floor (this.maze.charLine);
+		if (this.maze.walls[y] != undefined &&
+		 		this.maze.walls[y][x] != undefined &&
+		  		this.maze.walls[y][x]) {
 			
 			this.collide({
-				x: this.maze.charLine,
-				y: this.maze.charCol,
+				x: this.maze.charCol,
+				y: this.maze.charLine,
 				prevX: prevX,
 				prevY: prevY,
 				maze: maze
@@ -57,14 +57,13 @@ Controler.prototype = {
 		var flrPrevX = Math.floor(coords.prevX);
 		var flrPrevY = Math.floor(coords.prevY);
 
-		if (flrPrevX != flrX && flrPrevY != flrY)
-			if (coords.maze.walls[flrX][flrPrevY] == undefined) {
-				coords.prevX = coords.x;
-				flrPrevX = Math.floor(coords.x);
-			} else if (coords.maze.walls[flrPrevX][flrY] == undefined) { 
-				coords.prevY = coords.y;
-				flrPrevY = Math.floor(coords.y);
+		if (flrPrevX != flrX && flrPrevY != flrY) {
+			if (!coords.maze.walls[flrPrevY][flrX]) {
+				flrX = flrPrevX;
+			} else if (!coords.maze.walls[flrY][flrPrevX]) {
+				flrY = flrPrevY;
 			}
+		}
 
 		if (flrPrevX != flrX) {
 			coords.maze.charCol = Math.round(coords.prevX);
