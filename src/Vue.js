@@ -40,7 +40,7 @@ Vue.prototype = {
 		if (Assets.loaded && this.stage) {
 
 			// 1 - Input
-			//this.controler.refresh ();
+			this.controler.refresh ();
 
 			// 2 - Move
 			this.stage.refresh ();

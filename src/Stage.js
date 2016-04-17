@@ -6,39 +6,41 @@ function Stage (renderer, maze) {
 	this.wallsRendered = [];
 
 	this.character = Assets.textures.character;
-	this.character = new PIXI.extras.TilingSprite(this.character, this.character.width, this.character.height);
+	this.character = new PIXI.Sprite(this.character, this.character.width, this.character.height);
 	this.character.x = this.renderer.width/2;
 	this.character.y = this.renderer.height/2;
 	this.character.anchor.x = 0.5;
 	this.character.anchor.y = 0.5;
-	this.character.z = 2;
 
 	this.floorRendered = [];
 
 	var that = this;
 	var generate = function () {
-		for (var line=0 ; line<maze.walls.length ; line++) {
-			that.wallsRendered[line] = [];
+		for (var line=0 ; line<maze.height ; line++) {
 			that.floorRendered[line] = [];
-			for (var col=0 ; col<maze.walls[line].length ; col++) {
+			for (var col=0 ; col<maze.width ; col++) {
 				var floor = Assets.textures.floor;
-				floor = new PIXI.extras.TilingSprite(floor, floor.width, floor.height);
-				floor.z = 1;
+				floor = new PIXI.Sprite(floor, floor.width, floor.height);
 				that.floorRendered[line][col] = floor;
-				that.addChild(floor);
+				that.addChildAt(floor, line*this.maze.width + col);
+			}
+		}
 
+		that.addChildAt(that.character, that.children.length);
+
+		for (var line=0 ; line<maze.height ; line++) {
+			that.wallsRendered[line] = [];
+			for (var col=0 ; col<maze.width ; col++) {
 				if (maze.walls[line][col]){
 					var sprite = that.selectSprite (line, col);
-					sprite.z = 3;
 					that.wallsRendered[line][col] = sprite;
-					that.addChild(sprite);
+					that.addChildAt(sprite, that.children.length);
 				} else {
 					that.wallsRendered[line][col] = null;
 				}
 			}
 		}
-		that.addChild(that.character);
-		that.children.sort(depthCompare);
+		console.log("Toto");
 	}
 
 	var trigger = function() {
@@ -104,7 +106,7 @@ Stage.prototype.selectSprite = function (line, col) {
 		break;
 	}
 
-	var ts = new PIXI.extras.TilingSprite (texture, texture.width, texture.height);
+	var ts = new PIXI.Sprite (texture, texture.width, texture.height);
 
 
 	switch (nb) {
