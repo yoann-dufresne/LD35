@@ -98,7 +98,6 @@ var Assets = {
 		Assets.textures.wallsAnim = {};
 		var wallTypes = tilesAnimInfos.wallsHorror;
 		for (var wallType in wallTypes) {
-			console.log(wallType);
 			Assets.textures.wallsAnim[wallType] = [];
 			for (var nb in wallTypes[wallType]){
 		 		currWall = wallTypes[wallType][nb];

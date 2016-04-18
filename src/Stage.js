@@ -17,6 +17,14 @@ function Stage (renderer, maze) {
 	this.character.anchor.y = 0.5;
 	this.character.frame = 0;
 
+	this.foutain = Assets.textures.fountain1;
+	console.log(this.foutain);
+	this.foutain = new PIXI.Sprite(this.foutain, this.foutain.width, this.foutain.height);
+	var tile = this.maze.freeTiles[0];
+	console.log(tile);
+	//this.foutain.position.x = tile.col * Assets.tileSize;
+	//this.foutain.position.y = tile.line * Assets.tileSize;
+
 	this.floorRendered = [];
 	this.frame = CHAR_ANIM_RATE;
 
