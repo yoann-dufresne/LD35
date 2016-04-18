@@ -74,22 +74,22 @@ var Assets = {
 
 	loadItems: function(){
 		bottle1 = tilesInfos.bottle1;
-		Assets.textures.bottle1 = Assets.extractSubImage(bottle1.x, bottle1.y, Assets.tilesSheetCanvas);
+		Assets.textures.bottle1 = PIXI.Texture.fromCanvas(Assets.extractSubImage(bottle1.x, bottle1.y, Assets.tilesSheetCanvas));
 
 		bottle2 = tilesInfos.bottle1;
-		Assets.textures.bottle2 = Assets.extractSubImage(bottle2.x, bottle2.y, Assets.tilesSheetCanvas);
+		Assets.textures.bottle2 = PIXI.Texture.fromCanvas(Assets.extractSubImage(bottle2.x, bottle2.y, Assets.tilesSheetCanvas));
 
 		acid1 = tilesInfos.acid1;
-		Assets.textures.acid1 = Assets.extractSubImage(acid1.x, acid1.y, Assets.tilesSheetCanvas);
+		Assets.textures.acid1 = PIXI.Texture.fromCanvas(Assets.extractSubImage(acid1.x, acid1.y, Assets.tilesSheetCanvas));
 
 		acid2 = tilesInfos.acid2;
-		Assets.textures.acid2 = Assets.extractSubImage(acid2.x, acid2.y, Assets.tilesSheetCanvas);
+		Assets.textures.acid2 = PIXI.Texture.fromCanvas(Assets.extractSubImage(acid2.x, acid2.y, Assets.tilesSheetCanvas));
 
 		fountain1 = tilesInfos.fountain1;
-		Assets.textures.fountain1 = Assets.extractSubImage(fountain1.x, fountain1.y, Assets.tilesSheetCanvas);
+		Assets.textures.fountain1	 = PIXI.Texture.fromCanvas(Assets.extractSubImage(fountain1.x, fountain1.y, Assets.tilesSheetCanvas));
 
 		fountain2 = tilesInfos.fountain1;
-		Assets.textures.fountain2 = Assets.extractSubImage(fountain2.x, fountain2.y, Assets.tilesSheetCanvas);
+		Assets.textures.fountain2 = PIXI.Texture.fromCanvas(Assets.extractSubImage(fountain2.x, fountain2.y, Assets.tilesSheetCanvas));
 
 		Assets.loadedItems=true;
 	},
