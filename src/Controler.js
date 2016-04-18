@@ -116,11 +116,11 @@ Controler.prototype = {
 					 || col<0 || line<0 || col>=this.maze.width || line >= this.maze.height)
 						continue;
 					else if (line == tile.line && col == tile.col) {
-						var sprite = vue.stage.selectSprite(line, col);
+						var sprite = vue.stage.selectSprite(line, col, Assets.textures.wallsAnim);
 						vue.stage.wallsRendered[line][col] = sprite;
 						vue.stage.addChildAt(sprite, this.maze.width*this.maze.height+10);
 					} else
-						vue.stage.selectSprite(line, col, vue.stage.wallsRendered[line][col]);
+						vue.stage.selectSprite(line, col, Assets.textures.wallsAnim, vue.stage.wallsRendered[line][col]);
 				}
 
 			this.wallsFrame = WALLS_GENRATION_RATE;

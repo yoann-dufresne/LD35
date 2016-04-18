@@ -1,5 +1,5 @@
 const CHAR_ANIM_RATE = 6;
-const SHADOW_RATE = 12;
+const SHADOW_RATE = 36;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);
@@ -64,7 +64,7 @@ function Stage (renderer, maze) {
 			that.wallsRendered[line] = [];
 			for (var col=0 ; col<maze.width ; col++) {
 				if (maze.walls[line][col]){
-					var sprite = that.selectSprite (line, col);
+					var sprite = that.selectSprite (line, col, Assets.textures.wallsAnim);
 					that.wallsRendered[line][col] = sprite;
 					that.addChildAt(sprite, that.children.length);
 				} else {
@@ -153,7 +153,7 @@ Stage.prototype.shadowAnimation = function () {
 	this.mask.frame--;
 
 	if (this.mask.frame == 0 && this.radius > 1) {
-		this.radius--;
+		this.radius = Math.max (2, this.radius - 3);
 		this.blackFog.clear();
 		this.blackFog.lineStyle ( 2 , 0x000000,  1);
 		this.blackFog.beginFill(this.colour);
@@ -162,7 +162,7 @@ Stage.prototype.shadowAnimation = function () {
 	}
 }
 
-Stage.prototype.selectSprite = function (line, col, sprite) {
+Stage.prototype.selectSprite = function (line, col, textures, sprite) {
 	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
 	var south = this.maze.walls[line+1] == undefined || this.maze.walls[line+1][col] == undefined ? false : this.maze.walls[line+1][col];
 	var west = this.maze.walls[line] == undefined || this.maze.walls[line][col-1] == undefined ? false : this.maze.walls[line][col-1];
@@ -173,24 +173,24 @@ Stage.prototype.selectSprite = function (line, col, sprite) {
 	nb += east ? 1 : 0;
 	nb += west ? 1 : 0;
 
-	var texture = Assets.textures.walls[0]["empty"];
+	var texture = textures["empty"][0];
 	switch (nb) {
 		case 0:
-			texture = Assets.textures.walls[0]["full"];
+			texture = textures["full"][0];
 		break;
 		case 1:
-			texture = Assets.textures.wallsAnim["endLine"][0];
+			texture = textures["endLine"][0];
 		break;
 
 		case 2:
 		if ((east && west) || (south && north))
-			texture = Assets.textures.walls[0]["twoSides"];
+			texture = textures["twoSides"][0];
 		else
-			texture = Assets.textures.walls[0]["corner"];
+			texture = textures["corner"][0];
 		break;
 
 		case 3:
-		texture = Assets.textures.walls[0]["oneSide"];
+		texture = textures["oneSide"][0];
 		break;
 	}
 

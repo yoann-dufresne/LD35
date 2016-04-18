@@ -59,12 +59,13 @@ var Assets = {
 		Assets.textures.walls = [];
 		for (var i=0; i < tilesInfos.walls.length; i++){
 			var walls = tilesInfos.walls[i];
-			Assets.textures.walls[i] = {}
+			Assets.textures.walls[i] = {};
 			for (var type in walls) {
 				var canvas = Assets.extractSubImage(
 					walls[type].x, walls[type].y, Assets.tilesSheetCanvas
 				);
-				Assets.textures.walls[i][type] = PIXI.Texture.fromCanvas(canvas);
+				Assets.textures.walls[i][type] = [];
+				Assets.textures.walls[i][type][0] = PIXI.Texture.fromCanvas(canvas);
 			};
 			Assets.loadedWalls=true;
 		}
@@ -97,6 +98,7 @@ var Assets = {
 		Assets.textures.wallsAnim = {};
 		var wallTypes = tilesAnimInfos.wallsHorror;
 		for (var wallType in wallTypes) {
+			console.log(wallType);
 			Assets.textures.wallsAnim[wallType] = [];
 			for (var nb in wallTypes[wallType]){
 		 		currWall = wallTypes[wallType][nb];

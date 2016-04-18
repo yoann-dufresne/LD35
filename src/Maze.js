@@ -89,8 +89,6 @@ Maze.prototype = {
 			}
 		this.freeTiles = _.shuffle(this.freeTiles);
 
-		console.log (this.charLine,this.charCol);
-		console.log (this.walls[this.height/2][this.width/2]);
 		this.loaded = true;
 	},
 

@@ -68,12 +68,11 @@ var tilesAnimInfos = {
       {x: 3, y:0}
     ],
 
-    "hole": [
+    "full": [
       {x: 5, y:0}
-    ]
-    },
+    ],
 
-    "eye": [
+    "empty": [
       {x: 4, y: 0},
       {x: 4, y: 1},
       {x: 4, y: 2},
@@ -82,6 +81,7 @@ var tilesAnimInfos = {
       {x: 4, y: 5},
       {x: 4, y: 6},
       {x: 4, y: 7},
-    ],
+    ]
+    }
 
 };
