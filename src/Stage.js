@@ -231,7 +231,7 @@ Stage.prototype.eventsAnimation = function () {
 	);
 
 	if (dist > 2) {
-		var prop = ((this.radius-10)/Assets.tileSize) / dist;
+		var prop = (Math.min((this.radius-10), this.renderer.width/2 - 10)/Assets.tileSize) / dist;
 		var x = prop * (this.fountain.tile.col - this.maze.charCol);
 		var y = prop * (this.fountain.tile.line - this.maze.charLine);
 
