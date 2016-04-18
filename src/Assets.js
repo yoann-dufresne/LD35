@@ -13,6 +13,7 @@ var Assets = {
 	loadedWalls: false,
 	loadedChar: false,
 	loadedFloor: false,
+	loadedAnimWalls: false,
 
 	textures: {},
 
@@ -41,6 +42,8 @@ var Assets = {
 			spriteSheetCanvas.height = charImg.height;
 			spriteSheetCanvas.getContext("2d").drawImage(charImg, 0, 0);
 
+			Assets.loadWallsHorror(spriteSheetCanvas);
+
 			Assets.textures.character = [];
 			for (var idx=0 ; idx<8 ; idx++) {
 				var canvas = Assets.extractSubImage(6, idx, spriteSheetCanvas);
@@ -66,6 +69,25 @@ var Assets = {
 		}
 	},
 
+	loadWallsHorror: function(spriteSheetCanvas){
+		Assets.textures.wallsAnim = [];
+		var wallTypes = tilesAnimInfos.wallsHorror;
+		for (var wallType in wallTypes) {
+			Assets.textures.wallsAnim[wallType] = [];
+			for (var nb in wallTypes[wallType]){
+		 		currWall = wallTypes[wallType][nb];
+		 		var canvas = Assets.extractSubImage(
+					currWall.x, currWall.y, spriteSheetCanvas
+				);
+				document.body.appendChild(canvas);
+				console.log(wallType, nb);
+				Assets.textures.wallsAnim[wallType][nb] = PIXI.Texture.fromCanvas(canvas);
+			}
+		}
+		Assets.loadedAnimWalls = true;
+	},
+
+
 	loadFloor: function(){
 		floarImg = new Image();
 		floarImg.onload = function () {
@@ -74,7 +96,7 @@ var Assets = {
 			floorCanvas.height = Assets.tileSize;
 			ctx = floorCanvas.getContext("2d");
 			ctx.drawImage(floarImg, 0, 0);
-			Assets.textures.floor = PIXI.Texture.fromCanvas(cloneCanvas(floorCanvas));
+			Assets.textures.floor = PIXI.Texture.fromCanvas(floorCanvas);
 			Assets.loadedFloor = true;
 		}
 		floarImg.src = "tmp_art/floor.png";
@@ -91,7 +113,7 @@ var Assets = {
 
 		var event = new Event('loadingComplete');
 		var interv = setInterval(function() {
-			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor) {
+			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor && Assets.loadedAnimWalls) {
 				window.dispatchEvent(event);
 				Assets.loaded = true;
 				clearInterval(interv);

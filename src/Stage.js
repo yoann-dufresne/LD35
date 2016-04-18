@@ -179,7 +179,7 @@ Stage.prototype.selectSprite = function (line, col, sprite) {
 			texture = Assets.textures.walls[0]["full"];
 		break;
 		case 1:
-			texture = Assets.textures.walls[0]["endLine"];
+			texture = Assets.textures.wallsAnim["endLine"][0];
 		break;
 
 		case 2:
