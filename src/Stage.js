@@ -231,11 +231,15 @@ Stage.prototype.eventsAnimation = function () {
 		Math.pow(this.fountain.tile.col-this.maze.charCol, 2)
 	);
 
-	if (dist > 3) {
+	if (dist > 2) {
+		var prop = (this.radius/Assets.tileSize) / dist;
+		var x = 30;
+		var y = 30;
+
 		this.graphics.beginFill(0x0066ff);
 		this.graphics.drawCircle(
-			this.renderer.width/2 + 30,
-			this.renderer.height/2 + 30,
+			this.renderer.width/2 + x,
+			this.renderer.height/2 + y,
 			10
 		);
 		this.graphics.endFill();

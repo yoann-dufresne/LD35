@@ -28,6 +28,7 @@ function Vue (model, controler) {
 Vue.prototype = {
 
 	startAnimation: function () {
+		var that = this;
 		window.addEventListener('gameover', function (e) {that.ended=true}, false);
 		this.ended = false;
 
