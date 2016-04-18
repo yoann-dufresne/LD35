@@ -43,6 +43,18 @@ Controler.prototype = {
 			this.maze.caseChanged = true;
 		}
 
+		// Borders collider
+		if (this.maze.charCol < 0)
+			this.maze.charCol = 0;
+		else if (this.maze.charCol >= this.maze.width)
+			this.maze.charCol = this.maze.width - 0.000001;
+
+		if (this.maze.charLine < 0)
+			this.maze.charLine = 0;
+		else if (this.maze.charLine >= this.maze.height)
+			this.maze.charLine = this.maze.height - 0.000001;
+
+		// Walls collider
 		if (this.maze.walls[y] != undefined &&
 		 		this.maze.walls[y][x] != undefined &&
 		  		this.maze.walls[y][x]) {

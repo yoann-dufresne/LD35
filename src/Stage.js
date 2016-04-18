@@ -1,10 +1,12 @@
-var ANIMATION_FRAMERATE = 6;
+const CHAR_ANIM_FRAMERATE = 6;
+const SHADOW_FRAMERATE = 12;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);
 	this.renderer = renderer;
 	this.maze = maze;
 	this.wallsRendered = [];
+	this.radius = 300;
 
 	this.character = Assets.textures.character[0];
 	this.character = new PIXI.Sprite(this.character, this.character.width, this.character.height);
@@ -15,7 +17,7 @@ function Stage (renderer, maze) {
 	this.character.frame = 0;
 
 	this.floorRendered = [];
-	this.frame = ANIMATION_FRAMERATE;
+	this.frame = CHAR_ANIM_FRAMERATE;
 
 	this.blackFog = new PIXI.Graphics();
 	this.blackFog.lineStyle ( 2 , 0x000000,  1);
@@ -41,16 +43,11 @@ function Stage (renderer, maze) {
 	this.blackFog.position.y = renderer.height / 2;
 	// this.addChild(blackFog);
 	this.mask = this.blackFog;
+	this.mask.frame = SHADOW_FRAMERATE;
 
 
 	var that = this;
-	$("#radius").on("input change", function() {
-			that.blackFog.clear();
-			that.blackFog.lineStyle ( 2 , 0x000000,  1);
-			that.blackFog.beginFill(that.colour);
-			that.blackFog.drawCircle(renderer.width/2, renderer.height/2, $("#radius").val());
-			console.log($("#radius").val())
-	});
+
 	var generate = function () {
 		for (var line=0 ; line<maze.height ; line++) {
 			that.floorRendered[line] = [];
@@ -98,6 +95,7 @@ Stage.prototype.refresh = function () {
 	var cCol = this.maze.charCol;
 
 	this.charAnimation();
+	this.shadowAnimation();
 
 	for (var line=0 ; line<this.maze.height; line++) {
 		for (var col=0 ; col<this.maze.width ; col++) {
@@ -129,7 +127,7 @@ Stage.prototype.charAnimation = function () {
 		if (this.frame == 0) {
 			this.character.frame = (this.character.frame + 1) % Assets.textures.character.length;
 			this.character.texture = Assets.textures.character[this.character.frame];
-			this.frame = ANIMATION_FRAMERATE;
+			this.frame = CHAR_ANIM_FRAMERATE;
 		}
 	}
 
@@ -149,6 +147,19 @@ Stage.prototype.charAnimation = function () {
 		vue.stage.character.rotation = -3*Math.PI/4;
 	} else if (dx < 0 && dy < 0) {
 		vue.stage.character.rotation = -Math.PI/4;
+	}
+}
+
+Stage.prototype.shadowAnimation = function () {
+	this.mask.frame--;
+
+	if (this.mask.frame == 0 && this.radius > 1) {
+		this.radius--;
+		this.blackFog.clear();
+		this.blackFog.lineStyle ( 2 , 0x000000,  1);
+		this.blackFog.beginFill(this.colour);
+		this.blackFog.drawCircle(this.renderer.width/2, this.renderer.height/2, this.radius);
+		this.mask.frame = SHADOW_FRAMERATE;
 	}
 }
 
