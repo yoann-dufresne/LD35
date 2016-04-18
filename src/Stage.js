@@ -1,5 +1,5 @@
 const CHAR_ANIM_RATE = 6;
-const SHADOW_RATE = 1000;
+const SHADOW_RATE = 12;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);

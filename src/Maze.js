@@ -31,7 +31,10 @@ Maze.prototype = {
 				this.freeTiles.push(tile);
 			}
 
-		var idx = _.findIndex (candidates, {"line":this.height/2, "col":this.width/2});
+		var idx = _.findIndex (candidates, {
+			"line":Math.floor(this.height/2),
+			"col": Math.floor(this.width/2)
+		});
 		candidates.splice(idx, 1);
 
 		candidates = _.shuffle(candidates);
@@ -86,6 +89,8 @@ Maze.prototype = {
 			}
 		this.freeTiles = _.shuffle(this.freeTiles);
 
+		console.log (this.charLine,this.charCol);
+		console.log (this.walls[this.height/2][this.width/2]);
 		this.loaded = true;
 	},
 
@@ -98,7 +103,8 @@ Maze.prototype = {
 			&& (this.walls[tile.line-2] != undefined && this.walls[tile.line-2][tile.col] != undefined && !this.walls[tile.line-2][tile.col])
 			&& (this.walls[tile.line-2] != undefined && this.walls[tile.line-2][tile.col-1] != undefined && !this.walls[tile.line-2][tile.col-1])
 			&& (this.walls[tile.line-2] != undefined && this.walls[tile.line-2][tile.col+1] != undefined && !this.walls[tile.line-2][tile.col+1]))
-			free.push({"line":tile.line-1, "col":tile.col});
+			if (tile.line-1 != Math.floor(this.charLine) || tile.col != Math.floor(this.charCol))
+				free.push({"line":tile.line-1, "col":tile.col});
 
 		// South
 		if ((this.walls[tile.line+1] != undefined && this.walls[tile.line+1][tile.col-1] != undefined && !this.walls[tile.line+1][tile.col-1])
@@ -106,7 +112,8 @@ Maze.prototype = {
 			&& (this.walls[tile.line+2] != undefined && this.walls[tile.line+2][tile.col] != undefined && !this.walls[tile.line+2][tile.col])
 			&& (this.walls[tile.line+2] != undefined && this.walls[tile.line+2][tile.col-1] != undefined && !this.walls[tile.line+2][tile.col-1])
 			&& (this.walls[tile.line+2] != undefined && this.walls[tile.line+2][tile.col+1] != undefined && !this.walls[tile.line+2][tile.col+1]))
-			free.push({"line":tile.line+1, "col":tile.col});
+			if (tile.line+1 != Math.floor(this.charLine) || tile.col != Math.floor(this.charCol))
+				free.push({"line":tile.line+1, "col":tile.col});
 
 		// East
 		if ((this.walls[tile.line-1] != undefined && this.walls[tile.line-1][tile.col+1] != undefined && !this.walls[tile.line-1][tile.col+1])
@@ -114,7 +121,8 @@ Maze.prototype = {
 			&& (this.walls[tile.line] != undefined && this.walls[tile.line][tile.col+2] != undefined && !this.walls[tile.line][tile.col+2])
 			&& (this.walls[tile.line+1] != undefined && this.walls[tile.line+1][tile.col+1] != undefined && !this.walls[tile.line+1][tile.col+1])
 			&& (this.walls[tile.line+1] != undefined && this.walls[tile.line+1][tile.col+2] != undefined && !this.walls[tile.line+1][tile.col+2]))
-			free.push({"line":tile.line, "col":tile.col+1});
+			if (tile.line != Math.floor(this.charLine) || tile.col+1 != Math.floor(this.charCol))
+				free.push({"line":tile.line, "col":tile.col+1});
 
 		// West
 		if ((this.walls[tile.line-1] != undefined && this.walls[tile.line-1][tile.col-1] != undefined && !this.walls[tile.line-1][tile.col-1])
@@ -122,7 +130,8 @@ Maze.prototype = {
 			&& (this.walls[tile.line] != undefined && this.walls[tile.line][tile.col-2] != undefined && !this.walls[tile.line][tile.col-2])
 			&& (this.walls[tile.line+1] != undefined && this.walls[tile.line+1][tile.col-1] != undefined && !this.walls[tile.line+1][tile.col-1])
 			&& (this.walls[tile.line+1] != undefined && this.walls[tile.line+1][tile.col-2] != undefined && !this.walls[tile.line+1][tile.col-2]))
-			free.push({"line":tile.line, "col":tile.col-1});
+			if (tile.line != Math.floor(this.charLine) || tile.col-1 != Math.floor(this.charCol))
+				free.push({"line":tile.line, "col":tile.col-1});
 
 		return free;
 	}

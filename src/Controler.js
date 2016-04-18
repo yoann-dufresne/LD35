@@ -103,10 +103,10 @@ Controler.prototype = {
 		this.wallsFrame--;
 		if (this.wallsFrame <= 0) {
 			var tile = this.maze.freeTiles[0];
-			if (this.maze.charLine == tile.line && this.maze.charCol == tile.col)
+			if (Math.floor(this.maze.charLine) == tile.line && Math.floor(this.maze.charCol) == tile.col)
 				return;
 
-			console.log(tile);
+			//console.log(tile);
 			this.maze.walls[tile.line][tile.col] = true;
 			this.maze.freeTiles.splice(0, 1);
 
