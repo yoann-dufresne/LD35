@@ -94,8 +94,14 @@
       }
 
       var gameOver = function(t1){
+        $("#d1").hide();
+        $("#d2").hide();
+        $("#d3").hide();
+        $("#d4").hide();
         var t2 = new Date();
         var survival = Math.round((t2 - t1)/1000);
+        // if($("#dEnd").is(":visible"))
+        //   return;
         $("#dEnd").append(survival + " s.").show();
       }
 
