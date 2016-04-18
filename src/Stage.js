@@ -1,5 +1,5 @@
-const CHAR_ANIM_FRAMERATE = 6;
-const SHADOW_FRAMERATE = 12;
+const CHAR_ANIM_RATE = 6;
+const SHADOW_RATE = 1000;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);
@@ -17,13 +17,12 @@ function Stage (renderer, maze) {
 	this.character.frame = 0;
 
 	this.floorRendered = [];
-	this.frame = CHAR_ANIM_FRAMERATE;
+	this.frame = CHAR_ANIM_RATE;
 
 	this.blackFog = new PIXI.Graphics();
 	this.blackFog.lineStyle ( 2 , 0x000000,  1);
 	this.blackFog.beginFill(this.colour);
-	this.blackFog.drawCircle(renderer.width / 2, renderer.height / 2
-, 300);
+	this.blackFog.drawCircle(renderer.width / 2, renderer.height / 2, this.radius);
 
 	var canvas = document.createElement('canvas');
 	canvas.width = this.renderer.width;
@@ -43,7 +42,7 @@ function Stage (renderer, maze) {
 	this.blackFog.position.y = renderer.height / 2;
 	// this.addChild(blackFog);
 	this.mask = this.blackFog;
-	this.mask.frame = SHADOW_FRAMERATE;
+	this.mask.frame = SHADOW_RATE;
 
 
 	var that = this;
@@ -127,7 +126,7 @@ Stage.prototype.charAnimation = function () {
 		if (this.frame == 0) {
 			this.character.frame = (this.character.frame + 1) % Assets.textures.character.length;
 			this.character.texture = Assets.textures.character[this.character.frame];
-			this.frame = CHAR_ANIM_FRAMERATE;
+			this.frame = CHAR_ANIM_RATE;
 		}
 	}
 
@@ -159,11 +158,11 @@ Stage.prototype.shadowAnimation = function () {
 		this.blackFog.lineStyle ( 2 , 0x000000,  1);
 		this.blackFog.beginFill(this.colour);
 		this.blackFog.drawCircle(this.renderer.width/2, this.renderer.height/2, this.radius);
-		this.mask.frame = SHADOW_FRAMERATE;
+		this.mask.frame = SHADOW_RATE;
 	}
 }
 
-Stage.prototype.selectSprite = function (line, col) {
+Stage.prototype.selectSprite = function (line, col, sprite) {
 	var north = this.maze.walls[line-1] == undefined || this.maze.walls[line-1][col] == undefined ? false : this.maze.walls[line-1][col];
 	var south = this.maze.walls[line+1] == undefined || this.maze.walls[line+1][col] == undefined ? false : this.maze.walls[line+1][col];
 	var west = this.maze.walls[line] == undefined || this.maze.walls[line][col-1] == undefined ? false : this.maze.walls[line][col-1];
@@ -195,7 +194,13 @@ Stage.prototype.selectSprite = function (line, col) {
 		break;
 	}
 
-	var ts = new PIXI.Sprite (texture, texture.width, texture.height);
+	var ts;
+	if (sprite == undefined)
+		ts = new PIXI.Sprite (texture, texture.width, texture.height);
+	else {
+		ts = sprite;
+		ts.texture = texture;
+	}
 
 
 	switch (nb) {
@@ -203,15 +208,19 @@ Stage.prototype.selectSprite = function (line, col) {
 			if (south) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI;
+				ts.rotation = Math.PI;
 			} else if (east) {
 				ts.anchor.x = 0;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI/2;
+				ts.rotation = Math.PI/2;
 			} else if (west) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 0;
-				ts.rotation += -Math.PI/2;
+				ts.rotation = -Math.PI/2;
+			} else {
+				ts.anchor.x = 0;
+				ts.anchor.y = 0;
+				ts.rotation = 0;
 			}
 		break;
 
@@ -219,19 +228,23 @@ Stage.prototype.selectSprite = function (line, col) {
 			if (east && west) {
 				ts.anchor.x = 0;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI/2;
+				ts.rotation = Math.PI/2;
 			} else if (north && west) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 0;
-				ts.rotation += -Math.PI/2;
+				ts.rotation = -Math.PI/2;
 			} else if (south && west) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI;
+				ts.rotation = Math.PI;
 			} else if (south && east) {
 				ts.anchor.x = 0;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI/2;
+				ts.rotation = Math.PI/2;
+			} else {
+				ts.anchor.x = 0;
+				ts.anchor.y = 0;
+				ts.rotation = 0;
 			}
 		break;
 
@@ -239,15 +252,19 @@ Stage.prototype.selectSprite = function (line, col) {
 			if (!east) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 0;
-				ts.rotation += -Math.PI/2;
+				ts.rotation = -Math.PI/2;
 			} else if (!west) {
 				ts.anchor.x = 0;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI/2;
+				ts.rotation = Math.PI/2;
 			} else if (!north) {
 				ts.anchor.x = 1;
 				ts.anchor.y = 1;
-				ts.rotation += Math.PI;
+				ts.rotation = Math.PI;
+			} else {
+				ts.anchor.x = 0;
+				ts.anchor.y = 0;
+				ts.rotation = 0;
 			}
 		break;
 	}

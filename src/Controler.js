@@ -1,8 +1,10 @@
+const WALLS_GENRATION_RATE = 10;
 
 function Controler (input, maze) {
 	this.input = input;
 	this.maze = maze;
 	this.maze.caseChanged = false;
+	this.wallsFrame = WALLS_GENRATION_RATE;
 }
 
 Controler.prototype = {
@@ -67,6 +69,8 @@ Controler.prototype = {
 				maze: maze
 			});
 		}
+
+		this.wallGeneration();
 	},
 
 	collide: function (coords) {
@@ -94,6 +98,34 @@ Controler.prototype = {
 				coords.maze.charLine -= 0.000001
 		}
 	},
+
+	wallGeneration: function () {
+		this.wallsFrame--;
+		if (this.wallsFrame <= 0) {
+			var tile = this.maze.freeTiles[0];
+			if (this.maze.charLine == tile.line && this.maze.charCol == tile.col)
+				return;
+
+			console.log(tile);
+			this.maze.walls[tile.line][tile.col] = true;
+			this.maze.freeTiles.splice(0, 1);
+
+			for (var line=tile.line-1 ; line<=tile.line+1 ; line++)
+				for (var col=tile.col-1 ; col<=tile.col+1 ; col++) {
+					if ((line != tile.line && col != tile.col)
+					 || col<0 || line<0 || col>=this.maze.width || line >= this.maze.height)
+						continue;
+					else if (line == tile.line && col == tile.col) {
+						var sprite = vue.stage.selectSprite(line, col);
+						vue.stage.wallsRendered[line][col] = sprite;
+						vue.stage.addChildAt(sprite, this.maze.width*this.maze.height+10);
+					} else
+						vue.stage.selectSprite(line, col, vue.stage.wallsRendered[line][col]);
+				}
+
+			this.wallsFrame = WALLS_GENRATION_RATE;
+		}
+	}
 }
 
 var controler = new Controler (inputKeyboard, maze);

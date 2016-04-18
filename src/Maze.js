@@ -22,15 +22,19 @@ function Maze (width, height) {
 
 Maze.prototype = {
 	createWalls: function (size) {
+		this.freeTiles = [];
 		var candidates = [];
 		for (var line=0 ; line<this.height ; line++)
-			for (var col=0 ; col<this.width ; col++)
-				candidates.push({"line":line, "col":col});
+			for (var col=0 ; col<this.width ; col++) {
+				var tile = {"line":line, "col":col};
+				candidates.push(tile);
+				this.freeTiles.push(tile);
+			}
 
 		var idx = _.findIndex (candidates, {"line":this.height/2, "col":this.width/2});
 		candidates.splice(idx, 1);
 
-		_.shuffle(candidates);
+		candidates = _.shuffle(candidates);
 
 		while (candidates.length > 0) {
 			var tile = candidates[0];
@@ -55,6 +59,7 @@ Maze.prototype = {
 				continue;
 
 			this.walls[tile.line][tile.col] = true;
+
 			var walls = [];
 			walls.push(tile);
 
@@ -73,6 +78,14 @@ Maze.prototype = {
 				}
 			}
 		}
+
+		for (var line=this.height-1 ; line>=0 ; line--)
+			for (var col=this.width-1 ; col>=0 ; col--) {
+				if (this.walls[line][col])
+					this.freeTiles.splice(line*this.width+col, 1);
+			}
+		this.freeTiles = _.shuffle(this.freeTiles);
+
 		this.loaded = true;
 	},
 
