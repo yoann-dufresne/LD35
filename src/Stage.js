@@ -9,6 +9,8 @@ function Stage (renderer, maze) {
 	this.wallsRendered = [];
 	this.radius = 300;
 
+	this.audio = document.querySelector('#audioPlayer');
+
 	this.character = Assets.textures.character[0];
 	this.character = new PIXI.Sprite(this.character, this.character.width, this.character.height);
 	this.character.x = this.renderer.width/2;
@@ -81,6 +83,8 @@ function Stage (renderer, maze) {
 				}
 			}
 		}
+
+		that.audio.play();
 	}
 
 	var trigger = function() {
