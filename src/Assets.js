@@ -13,7 +13,7 @@ var Assets = {
 	loadedWalls: false,
 	loadedChar: false,
 	loadedFloor: false,
-	loadedAnimWalls: false,
+	loadedAnim: false,
 
 	textures: {},
 
@@ -42,7 +42,7 @@ var Assets = {
 			spriteSheetCanvas.height = charImg.height;
 			spriteSheetCanvas.getContext("2d").drawImage(charImg, 0, 0);
 
-			Assets.loadWallsHorror(spriteSheetCanvas);
+			Assets.loadAnims(spriteSheetCanvas);
 
 			Assets.textures.character = [];
 			for (var idx=0 ; idx<8 ; idx++) {
@@ -69,7 +69,7 @@ var Assets = {
 		}
 	},
 
-	loadWallsHorror: function(spriteSheetCanvas){
+	loadAnims: function(spriteSheetCanvas){
 		Assets.textures.wallsAnim = [];
 		var wallTypes = tilesAnimInfos.wallsHorror;
 		for (var wallType in wallTypes) {
@@ -79,12 +79,20 @@ var Assets = {
 		 		var canvas = Assets.extractSubImage(
 					currWall.x, currWall.y, spriteSheetCanvas
 				);
-				document.body.appendChild(canvas);
-				console.log(wallType, nb);
 				Assets.textures.wallsAnim[wallType][nb] = PIXI.Texture.fromCanvas(canvas);
 			}
 		}
-		Assets.loadedAnimWalls = true;
+
+		Assets.textures.eye = [];
+		var eyes = tilesAnimInfos.eye;
+		for (eye in eyes){
+			var canvas = Assets.extractSubImage(
+					eyes[eye].x, eyes[eye].y, spriteSheetCanvas
+				);
+				Assets.textures.eye.push(canvas)
+				document.body.appendChild(canvas);
+		}
+		Assets.loadedAnim = true;
 	},
 
 
@@ -113,7 +121,7 @@ var Assets = {
 
 		var event = new Event('loadingComplete');
 		var interv = setInterval(function() {
-			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor && Assets.loadedAnimWalls) {
+			if(Assets.loadedChar && Assets.loadedWalls && Assets.loadedFloor && Assets.loadedAnim) {
 				window.dispatchEvent(event);
 				Assets.loaded = true;
 				clearInterval(interv);
