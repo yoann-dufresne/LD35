@@ -8,14 +8,14 @@ function depthCompare(a,b) {
 
 function Vue (model, controler) {
 	this.renderer = PIXI.autoDetectRenderer(680, 680,{backgroundColor : 0x444444});
-	document.body.appendChild(this.renderer.view);
+	var element = $(".pixi-container")[0];
+	element.appendChild(this.renderer.view);
+
 	this.maze = maze;
 	this.controler = controler;
 
 	this.stats = new Stats();
-	document.body.appendChild( this.stats.domElement );
-	this.stats.domElement.style.position = "absolute";
-	this.stats.domElement.style.top = "0px";
+	$(".stats")[0].appendChild( this.stats.domElement );
 
 	var that = this;
 	window.addEventListener('loadingComplete',
@@ -61,4 +61,8 @@ Vue.prototype = {
 }
 
 var vue = new Vue (maze, controler);
-vue.startAnimation();
+
+$(function(){
+		vue.startAnimation();
+	}
+)

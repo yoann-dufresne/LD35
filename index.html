@@ -3,10 +3,66 @@
   <head>
     <meta charset="utf-8">
     <title>The maze nightmare</title>
+
+    <style type="text/css">
+      .centered {
+        text-align: center;
+      }
+
+      body {
+        background-color: #444444;
+      }
+
+      .stats {
+        position: absolute;
+        top: 0px;
+        visibility: hidden;
+      }
+
+      .pixi-container{
+        margin-top: -40px;
+      }
+
+      .dialog{
+        color: #EEEEEE;
+        font-family: 'Source Sans Pro', sans-serif;
+        font-size: 32px;
+        line-height: 32px;
+      }
+
+      .hidden{
+        display: none;
+      }
+    </style>
+
     <!--link rel="stylesheet" href="style.css"-->
   </head>
   <body>
     <audio id="audioPlayer" src="art/music.m4a" loop></audio>
+
+    <div class="pixi-container centered"></div>
+    <div class="stats"></div>
+
+    <div id="d1" class="dialog centered hidden">
+      Where am I? <br>
+      What am I doing here?
+    </div>
+
+    <div id="d2" class="dialog centered hidden">
+      It's impossible! <br>
+      It must be a nightmare...
+    </div>
+
+    <div id="d3" class="dialog centered hidden">
+      Look at these walls. They're horrible. <br>
+      And... They're moving...
+    </div>
+
+    <div id="d4" class="dialog centered hidden">
+      I will be trapped soon. <br>
+      I must find something to wake me up.
+    </div>
+
   </body>
 
   <script type="text/javascript" src="lib/stats.min.js"></script>
@@ -20,4 +76,29 @@
   <script type="text/javascript" src="src/Controler.js"></script>
   <script type="text/javascript" src="src/Stage.js"></script>
   <script type="text/javascript" src="src/Vue.js"></script>
+
+      <script type="text/javascript">
+      var toggle = function(id_hide, id_show, dur){
+        hide = $(id_hide);
+        show = $(id_show);
+
+        hide.fadeOut(dur);
+        show.delay(dur).fadeIn(dur);
+      }
+
+      $(function(){
+        dur = 4000;
+        $("#d1").show();
+        setTimeout(function(){
+          toggle("#d1", "#d2", dur)
+        }, 0);
+        setTimeout(function(){
+          toggle("#d2", "#d3", dur)
+        }, 8000);
+
+        setTimeout(function(){
+          toggle("#d3", "#d4", dur)
+        }, 16000);
+      })
+    </script>
 </html>
