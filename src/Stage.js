@@ -20,12 +20,12 @@ function Stage (renderer, maze) {
 	this.character.frame = 0;
 
 	this.foutain = Assets.textures.fountain1;
-	console.log(this.foutain);
 	this.foutain = new PIXI.Sprite(this.foutain, this.foutain.width, this.foutain.height);
 	var tile = this.maze.freeTiles[0];
+	tile = {"line":49,"col":50};
 	console.log(tile);
-	//this.foutain.position.x = tile.col * Assets.tileSize;
-	//this.foutain.position.y = tile.line * Assets.tileSize;
+	this.foutain.position.x = tile.col * Assets.tileSize;
+	this.foutain.position.y = tile.line * Assets.tileSize;
 
 	this.floorRendered = [];
 	this.frame = CHAR_ANIM_RATE;
@@ -69,6 +69,7 @@ function Stage (renderer, maze) {
 			}
 		}
 
+		that.addChildAt(that.foutain, that.children.length);
 		that.addChildAt(that.character, that.children.length);
 
 		for (var line=0 ; line<maze.height ; line++) {
