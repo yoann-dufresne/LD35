@@ -1,26 +1,9 @@
-function cloneCanvas(oldCanvas) {
-
-    //create a new canvas
-    var newCanvas = document.createElement('canvas');
-    var context = newCanvas.getContext('2d');
-
-    //set dimensions
-    newCanvas.width = oldCanvas.width;
-    newCanvas.height = oldCanvas.height;
-
-    //apply the old canvas to the new one
-    context.drawImage(oldCanvas, 0, 0);
-
-    //return the new canvas
-    return newCanvas;
-}
-
 var Assets = {
 	tileSize: 32,
 	loader: new PIXI.loaders.Loader(),
 	loaded: false,
 	//character: 'assets/testCercle.png',
-	sprintSheetURL: "art/tiles.png",
+	spriteSheetUrl: "art/tiles.png",
 	tilesSheetCanvas: document.createElement("canvas"),
 	tileCanvas: document.createElement("canvas"),
 
@@ -57,7 +40,7 @@ var Assets = {
 			spriteSheetCanvas.width = charImg.width;
 			spriteSheetCanvas.height = charImg.height;
 			spriteSheetCanvas.getContext("2d").drawImage(charImg, 0, 0);
-			
+
 			Assets.textures.character = [];
 			for (var idx=0 ; idx<8 ; idx++) {
 				var canvas = Assets.extractSubImage(6, idx, spriteSheetCanvas);
@@ -121,7 +104,7 @@ var Assets = {
 		Assets.img.onload = function () {
 			Assets.separateSprintes ();
 		};
-		Assets.img.src = Assets.sprintSheetURL;
+		Assets.img.src = Assets.spriteSheetUrl;
 	},
 
 };
