@@ -1,5 +1,6 @@
 const CHAR_ANIM_RATE = 6;
 const SHADOW_RATE = 36;
+const WALL_RATE = 15;
 
 function Stage (renderer, maze) {
 	PIXI.Container.call(this);
@@ -90,12 +91,14 @@ Stage.prototype = Object.create(PIXI.Container.prototype, {
 });
 
 Stage.prototype.refresh = function () {
-	var cLine = this.maze.charLine;
-	var cCol = this.maze.charCol;
-
+	this.tilesAnimation();
 	this.charAnimation();
 	this.shadowAnimation();
+};
 
+Stage.prototype.tilesAnimation = function () {
+	var cLine = this.maze.charLine;
+	var cCol = this.maze.charCol;
 	for (var line=0 ; line<this.maze.height; line++) {
 		for (var col=0 ; col<this.maze.width ; col++) {
 			var floor = this.floorRendered[line][col];
@@ -106,13 +109,17 @@ Stage.prototype.refresh = function () {
 				var ts = this.wallsRendered[line][col]; // this.renderer.width
 				ts.position.y = this.renderer.height/2 + (line-cLine) * Assets.tileSize;
 				ts.position.x = this.renderer.width/2 + (col-cCol) * Assets.tileSize;
+
+				ts.frame--;
+				if (ts.frame <= 0) {
+					ts.step = (ts.step + 1) % ts.textures.length;
+					ts.texture = ts.textures[ts.step];
+					ts.frame = WALL_RATE;
+				}
 			}
 		}
 	}
-
-	this.maze.oldCharCol = cCol;
-	this.maze.oldCharLine = cLine;
-};
+}
 
 Stage.prototype.charAnimation = function () {
 	var dx = this.maze.charCol - this.maze.oldCharCol;
@@ -147,6 +154,9 @@ Stage.prototype.charAnimation = function () {
 	} else if (dx < 0 && dy < 0) {
 		vue.stage.character.rotation = -Math.PI/4;
 	}
+
+	this.maze.oldCharCol = this.maze.charCol;
+	this.maze.oldCharLine = this.maze.charLine;
 }
 
 Stage.prototype.shadowAnimation = function () {
@@ -196,13 +206,15 @@ Stage.prototype.selectSprite = function (line, col, textures, sprite) {
 
 	var ts;
 	var rnd = Math.floor(Math.random() * texture.length);
-	ts.step = rnd;
 	if (sprite == undefined)
 		ts = new PIXI.Sprite (texture[rnd], texture[rnd].width, texture[rnd].height);
 	else {
 		ts = sprite;
 		ts.texture = texture[rnd];
 	}
+	ts.step = rnd;
+	ts.frame = Math.floor(Math.random() * WALL_RATE);
+	ts.textures = texture;
 
 
 	switch (nb) {
