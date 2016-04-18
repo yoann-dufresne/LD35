@@ -202,21 +202,20 @@ Stage.prototype.eventsAnimation = function () {
 	// Fountain found !
 	if (foun.tile.line == Math.floor(this.maze.charLine) && foun.tile.col == Math.floor(this.maze.charCol)) {
 		var txt = Assets.textures.fountain2;
-		var sprite = new PIXI.Sprite (txt, txt.width, txt.height);
-		sprite.position = foun.position;
-		sprite.tile = foun.tile;
-		this.oldFountains.push(sprite);
+		this.fountain.texture = txt;
+		this.oldFountains.push(foun);
 
-		this.addChildAt(sprite, this.maze.width*this.maze.height);
-		this.fountain.val++;
+		var txt = Assets.textures.fountain1;
+		this.fountain = new PIXI.Sprite (txt, txt.width, txt.height)
+		this.addChildAt(this.fountain, this.maze.width*this.maze.height);
+		this.fountain.val = foun.val + 1;
 		this.fountain.tile = this.maze.freeTiles[this.maze.freeTiles.length-this.fountain.val];
-		console.log(this.fountain.tile);
 
-		this.radius += 50;
+		this.radius += 40 + Math.random()*20;
 	}
 
-	foun.position.x = this.renderer.width/2 + (foun.tile.col-this.maze.charCol) * Assets.tileSize;
-	foun.position.y = this.renderer.height/2 + (foun.tile.line-this.maze.charLine) * Assets.tileSize;
+	this.fountain.position.x = this.renderer.width/2 + (foun.tile.col-this.maze.charCol) * Assets.tileSize;
+	this.fountain.position.y = this.renderer.height/2 + (foun.tile.line-this.maze.charLine) * Assets.tileSize;
 
 	for (var idx=0 ; idx<this.oldFountains.length ; idx++) {
 		var f = this.oldFountains[idx];
