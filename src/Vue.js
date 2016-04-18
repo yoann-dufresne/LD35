@@ -13,8 +13,6 @@ function Vue (model, controler) {
 	this.controler = controler;
 
 	this.stats = new Stats();
-
-
 	document.body.appendChild( this.stats.domElement );
 	this.stats.domElement.style.position = "absolute";
 	this.stats.domElement.style.top = "0px";
