@@ -173,33 +173,35 @@ Stage.prototype.selectSprite = function (line, col, textures, sprite) {
 	nb += east ? 1 : 0;
 	nb += west ? 1 : 0;
 
-	var texture = textures["empty"][0];
+	var texture = textures["empty"];
 	switch (nb) {
 		case 0:
-			texture = textures["full"][0];
+			texture = textures["full"];
 		break;
 		case 1:
-			texture = textures["endLine"][0];
+			texture = textures["endLine"];
 		break;
 
 		case 2:
 		if ((east && west) || (south && north))
-			texture = textures["twoSides"][0];
+			texture = textures["twoSides"];
 		else
-			texture = textures["corner"][0];
+			texture = textures["corner"];
 		break;
 
 		case 3:
-		texture = textures["oneSide"][0];
+		texture = textures["oneSide"];
 		break;
 	}
 
 	var ts;
+	var rnd = Math.floor(Math.random() * texture.length);
+	ts.step = rnd;
 	if (sprite == undefined)
-		ts = new PIXI.Sprite (texture, texture.width, texture.height);
+		ts = new PIXI.Sprite (texture[rnd], texture[rnd].width, texture[rnd].height);
 	else {
 		ts = sprite;
-		ts.texture = texture;
+		ts.texture = texture[rnd];
 	}
 
 
