@@ -19,13 +19,11 @@ function Stage (renderer, maze) {
 	this.character.anchor.y = 0.5;
 	this.character.frame = 0;
 
-	this.foutain = Assets.textures.fountain1;
-	this.foutain = new PIXI.Sprite(this.foutain, this.foutain.width, this.foutain.height);
-	var tile = this.maze.freeTiles[0];
-	tile = {"line":49,"col":50};
+	this.fountain = Assets.textures.fountain1;
+	this.fountain = new PIXI.Sprite(this.fountain, this.fountain.width, this.fountain.height);
+	var tile = this.maze.freeTiles[this.maze.freeTiles.length-1];
 	console.log(tile);
-	this.foutain.position.x = tile.col * Assets.tileSize;
-	this.foutain.position.y = tile.line * Assets.tileSize;
+	this.fountain.tile = tile;
 
 	this.floorRendered = [];
 	this.frame = CHAR_ANIM_RATE;
@@ -69,7 +67,7 @@ function Stage (renderer, maze) {
 			}
 		}
 
-		that.addChildAt(that.foutain, that.children.length);
+		that.addChildAt(that.fountain, that.children.length);
 		that.addChildAt(that.character, that.children.length);
 
 		for (var line=0 ; line<maze.height ; line++) {
@@ -112,6 +110,7 @@ Stage.prototype.refresh = function () {
 	this.tilesAnimation();
 	this.charAnimation();
 	this.shadowAnimation();
+	this.eventsAnimation();
 };
 
 Stage.prototype.tilesAnimation = function () {
@@ -188,6 +187,16 @@ Stage.prototype.shadowAnimation = function () {
 		this.blackFog.drawCircle(this.renderer.width/2, this.renderer.height/2, this.radius);
 		this.mask.frame = SHADOW_RATE;
 	}
+}
+
+Stage.prototype.eventsAnimation = function () {
+	this.fountain.position.x = this.renderer.width/2 + (this.fountain.tile.col-this.maze.charCol) * Assets.tileSize;
+	this.fountain.position.y = this.renderer.height/2 + (this.fountain.tile.line-this.maze.charLine) * Assets.tileSize;
+
+	var dist = Math.sqrt (
+		Math.pow(this.fountain.position.line-this.maze.line, 2) +
+		Math.pow(this.fountain.position.col-this.maze.col, 2)
+	);
 }
 
 Stage.prototype.selectSprite = function (line, col, textures, sprite) {

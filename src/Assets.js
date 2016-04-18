@@ -86,7 +86,8 @@ var Assets = {
 		Assets.textures.acid2 = PIXI.Texture.fromCanvas(Assets.extractSubImage(acid2.x, acid2.y, Assets.tilesSheetCanvas));
 
 		fountain1 = tilesInfos.fountain1;
-		Assets.textures.fountain1	 = PIXI.Texture.fromCanvas(Assets.extractSubImage(fountain1.x, fountain1.y, Assets.tilesSheetCanvas));
+		Assets.textures.fountain1 = PIXI.Texture.fromCanvas(Assets.extractSubImage(fountain1.x, fountain1.y, Assets.tilesSheetCanvas));
+		Assets.textures.fountain1.petitnom = "fountain1";
 
 		fountain2 = tilesInfos.fountain1;
 		Assets.textures.fountain2 = PIXI.Texture.fromCanvas(Assets.extractSubImage(fountain2.x, fountain2.y, Assets.tilesSheetCanvas));
