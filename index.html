@@ -54,7 +54,7 @@
     </div>
 
     <div id="d3" class="dialog centered hidden">
-      Look at these walls. They're horrible. <br>
+      Look at those walls. They're horrible. <br>
       And... They're moving...
     </div>
 
@@ -62,6 +62,13 @@
       I will be trapped soon. <br>
       I must find something to wake me up.
     </div>
+
+    <div id="dEnd" class="dialog centered hidden">
+      I think I will stop here. <br> <br>
+      The game is over. <br>
+      You last:
+    </div>
+
 
   </body>
 
@@ -86,7 +93,14 @@
         show.delay(dur).fadeIn(dur);
       }
 
+      var gameOver = function(t1){
+        var t2 = new Date();
+        var survival = Math.round((t2 - t1)/1000);
+        $("#dEnd").append(survival + " s.").show();
+      }
+
       $(function(){
+        var t1 = new Date();
         dur = 4000;
         $("#d1").show();
         setTimeout(function(){
@@ -94,11 +108,20 @@
         }, 0);
         setTimeout(function(){
           toggle("#d2", "#d3", dur)
-        }, 8000);
+        }, 2*dur);
 
         setTimeout(function(){
           toggle("#d3", "#d4", dur)
-        }, 16000);
+        }, 4*dur);
+
+        setTimeout(function(){
+          $("#d4").fadeOut(dur)
+        }, 6*dur);
+
+        window.addEventListener("gameover", function(){
+          console.log('over');
+          gameOver(t1)
+        });
       })
     </script>
 </html>
