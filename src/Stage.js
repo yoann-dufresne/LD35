@@ -9,6 +9,8 @@ function Stage (renderer, maze) {
 	this.wallsRendered = [];
 	this.radius = 300;
 
+	this.graphics = new PIXI.Graphics();
+
 	this.audio = document.querySelector('#audioPlayer');
 
 	this.character = Assets.textures.character[0];
@@ -85,6 +87,8 @@ function Stage (renderer, maze) {
 				}
 			}
 		}
+
+		that.addChildAt(that.graphics, that.children.length);
 
 		that.audio.play();
 		setInterval(function () {
@@ -195,6 +199,7 @@ Stage.prototype.shadowAnimation = function () {
 Stage.prototype.eventsAnimation = function () {
 	var foun = this.fountain;
 
+	// Fountain found !
 	if (foun.tile.line == Math.floor(this.maze.charLine) && foun.tile.col == Math.floor(this.maze.charCol)) {
 		var txt = Assets.textures.fountain2;
 		var sprite = new PIXI.Sprite (txt, txt.width, txt.height);
@@ -219,10 +224,29 @@ Stage.prototype.eventsAnimation = function () {
 		f.position.y = this.renderer.height/2 + (f.tile.line-this.maze.charLine) * Assets.tileSize;
 	}
 
+
+	// Direction of the fountain
 	var dist = Math.sqrt (
-		Math.pow(this.fountain.position.line-this.maze.line, 2) +
-		Math.pow(this.fountain.position.col-this.maze.col, 2)
+		Math.pow(this.fountain.tile.line-this.maze.charLine, 2) +
+		Math.pow(this.fountain.tile.col-this.maze.charCol, 2)
 	);
+
+	if (dist > 3) {
+		this.graphics.beginFill(0x0066ff);
+		this.graphics.drawCircle(
+			this.renderer.width/2 + 30,
+			this.renderer.height/2 + 30,
+			10
+		);
+		this.graphics.endFill();
+	}
+
+
+	// Game over
+	if (this.radius < 30) {
+		var event = new Event('gameover');
+		window.dispatchEvent(event);
+	}
 }
 
 Stage.prototype.selectSprite = function (line, col, textures, sprite) {

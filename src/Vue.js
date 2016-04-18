@@ -28,6 +28,9 @@ function Vue (model, controler) {
 Vue.prototype = {
 
 	startAnimation: function () {
+		window.addEventListener('gameover', function (e) {that.ended=true}, false);
+		this.ended = false;
+
 		// Start the animation
 		this.animate();
 	},
@@ -35,7 +38,7 @@ Vue.prototype = {
 	animate: function () {
 		this.stats.begin();
 
-		if (Assets.loaded && this.stage) {
+		if (Assets.loaded && this.stage && !this.ended) {
 
 			// 1 - Input
 			this.controler.refresh ();
