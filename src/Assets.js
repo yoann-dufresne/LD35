@@ -70,7 +70,7 @@ var Assets = {
 	},
 
 	loadAnims: function(spriteSheetCanvas){
-		Assets.textures.wallsAnim = [];
+		Assets.textures.wallsAnim = {};
 		var wallTypes = tilesAnimInfos.wallsHorror;
 		for (var wallType in wallTypes) {
 			Assets.textures.wallsAnim[wallType] = [];
