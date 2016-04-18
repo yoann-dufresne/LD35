@@ -1,5 +1,5 @@
 const CHAR_ANIM_RATE = 6;
-const SHADOW_RATE = 36;
+const SHADOW_RATE = 45;
 const WALL_RATE = 15;
 
 function Stage (renderer, maze) {
@@ -21,9 +21,12 @@ function Stage (renderer, maze) {
 
 	this.fountain = Assets.textures.fountain1;
 	this.fountain = new PIXI.Sprite(this.fountain, this.fountain.width, this.fountain.height);
-	var tile = this.maze.freeTiles[this.maze.freeTiles.length-1];
-	console.log(tile);
-	this.fountain.tile = tile;
+	this.fountain.val = 1;
+	var t = this.maze.freeTiles[this.maze.freeTiles.length-this.fountain.val];
+	console.log(t);
+	this.fountain.tile = t;
+
+	this.oldFountains = [];
 
 	this.floorRendered = [];
 	this.frame = CHAR_ANIM_RATE;
@@ -190,8 +193,31 @@ Stage.prototype.shadowAnimation = function () {
 }
 
 Stage.prototype.eventsAnimation = function () {
-	this.fountain.position.x = this.renderer.width/2 + (this.fountain.tile.col-this.maze.charCol) * Assets.tileSize;
-	this.fountain.position.y = this.renderer.height/2 + (this.fountain.tile.line-this.maze.charLine) * Assets.tileSize;
+	var foun = this.fountain;
+
+	if (foun.tile.line == Math.floor(this.maze.charLine) && foun.tile.col == Math.floor(this.maze.charCol)) {
+		var txt = Assets.textures.fountain2;
+		var sprite = new PIXI.Sprite (txt, txt.width, txt.height);
+		sprite.position = foun.position;
+		sprite.tile = foun.tile;
+		this.oldFountains.push(sprite);
+
+		this.addChildAt(sprite, this.maze.width*this.maze.height);
+		this.fountain.val++;
+		this.fountain.tile = this.maze.freeTiles[this.maze.freeTiles.length-this.fountain.val];
+		console.log(this.fountain.tile);
+
+		this.radius += 50;
+	}
+
+	foun.position.x = this.renderer.width/2 + (foun.tile.col-this.maze.charCol) * Assets.tileSize;
+	foun.position.y = this.renderer.height/2 + (foun.tile.line-this.maze.charLine) * Assets.tileSize;
+
+	for (var idx=0 ; idx<this.oldFountains.length ; idx++) {
+		var f = this.oldFountains[idx];
+		f.position.x = this.renderer.width/2 + (f.tile.col-this.maze.charCol) * Assets.tileSize;
+		f.position.y = this.renderer.height/2 + (f.tile.line-this.maze.charLine) * Assets.tileSize;
+	}
 
 	var dist = Math.sqrt (
 		Math.pow(this.fountain.position.line-this.maze.line, 2) +
