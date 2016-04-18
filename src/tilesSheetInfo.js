@@ -17,6 +17,16 @@ var tilesInfos = {
     // }
   ],
 
+  "bottle1": {x: 0, y: 1},
+  "bottle2": {x: 0, y: 2},
+
+  "acid1": {x: 1, y: 1},
+  "acid2": {x: 1, y: 2},
+
+  "fountain1": {x: 2, y: 1},
+  "fountain2": {x: 2, y: 2},
+
+
 };
 
 
