@@ -86,6 +86,11 @@ function Stage (renderer, maze) {
 		}
 
 		that.audio.play();
+		setInterval(function () {
+			that.audio.pause();
+			that.audio.currentTime = 0;
+			that.audio.play();
+		}, that.audio.duration*1000-1);
 	}
 
 	var trigger = function() {
