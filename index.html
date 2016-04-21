@@ -107,9 +107,45 @@
         // if($("#dEnd").is(":visible"))
         //   return;
         $("#dEnd").append(survival + " s.").show();
+
+        var data = {
+          "status": "gameOver",
+          "time": survival
+        }
+
+        log(data);
+      };
+
+      function guid() {
+        function s4() {
+          return Math.floor((1 + Math.random()) * 0x10000)
+            .toString(16)
+            .substring(1);
+        }
+        return s4() + s4() + '-' + s4() + '-' + s4() + '-' +
+          s4() + '-' + s4() + s4() + s4();
+      };
+
+      function log(data) {
+         var url = "http://logsene-receiver.sematext.com/dc4df1f3-2a4e-473c-870d-43deecc2fe5b/example/"
+        data.uuid = uuid;
+
+        $.ajax({
+          type: "POST",
+          url: url,
+          data: JSON.stringify(data),
+          success: function(){console.log("success log")},
+        });
       }
 
       $(function(){
+        uuid = guid()
+        var data = {
+          "status": "loaded",
+          "time": 0
+        };
+        log(data)
+
         var t1 = new Date();
         dur = 4000;
         $("#d1").show();
