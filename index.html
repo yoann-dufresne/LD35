@@ -116,6 +116,22 @@
         log(data);
       };
 
+
+      function sendFPS(){
+        var acc = 0;
+        var length = vue.fpsStats.length;
+        for (var i = 0; i < length; i++) {
+          acc += vue.fpsStats[i];
+        };
+        data = {
+          "meanFPS": (acc*1.0) / length,
+          "nbPoints": length,
+        }
+        vue.fpsStats = [];
+        log(data);
+        console.log(data);
+      }
+
       function guid() {
         function s4() {
           return Math.floor((1 + Math.random()) * 0x10000)
@@ -144,7 +160,8 @@
           "status": "loaded",
           "time": 0
         };
-        log(data)
+        log(data);
+        setInterval(sendFPS, 2000);
 
         var t1 = new Date();
         dur = 4000;

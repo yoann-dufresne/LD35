@@ -15,6 +15,7 @@ function Vue (model, controler) {
 	this.controler = controler;
 
 	this.stats = new Stats();
+	this.fpsStats = [];
 	$(".stats")[0].appendChild( this.stats.domElement );
 
 	var that = this;
@@ -38,6 +39,7 @@ Vue.prototype = {
 
 	animate: function () {
 		this.stats.begin();
+		var tic = ( performance || Date ).now();
 
 		if (Assets.loaded && this.stage && !this.ended) {
 
@@ -59,6 +61,7 @@ Vue.prototype = {
 
 		requestAnimationFrame(function () {vue.animate();});
 		this.stats.end();
+		this.fpsStats.push(( performance || Date ).now() - tic);
 	},
 
 
